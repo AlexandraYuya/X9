@@ -9,4 +9,10 @@
     <string name="severity_moderate">Moderate</string>
     <string name="severity_major">Major</string>
     <string name="submit_btn">Submit</string>
+
+    <string-array name="report_types_array">
+        <item>Accident</item>
+        <item>Speed Check</item>
+        <item>Traffic</item>
+    </string-array>
 </resources>
