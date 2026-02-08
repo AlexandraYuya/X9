@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="input">#F8E3F8</color>
+    <color name="title">#626060</color>
+    <color name="title_focused">#73637C</color>
+    <color name="toggle_button">#F2D9FC</color>
 </resources>
