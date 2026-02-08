@@ -5,6 +5,9 @@
     <color name="input">#FFF1FF</color>
     <color name="title">#626060</color>
     <color name="title_focused">#73637C</color>
-    <color name="toggle_button">#F8E3F8</color>
+    <color name="toggle_default_btn">#F8E3F8</color>
+    <color name="toggle_checked_btn">#A990BC</color>
+    <color name="toggle_default_txt">#626060</color>
+    <color name="toggle_checked_txt">#FFF1FF</color>
     <color name="submit_btn">#A990BC</color>
 </resources>

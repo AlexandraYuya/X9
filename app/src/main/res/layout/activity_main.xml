@@ -151,6 +151,7 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:orientation="horizontal"
+            app:singleSelection="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/report_description_layout">
@@ -160,24 +161,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/severity_minor"
-                android:textColor="@color/title"
-                app:backgroundTint="@color/toggle_button" />
+                android:textColor="@color/toggle_txt"
+                app:backgroundTint="@color/toggle_bg" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_moderate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/severity_moderate"
-                android:textColor="@color/title"
-                app:backgroundTint="@color/toggle_button" />
+                android:textColor="@color/toggle_txt"
+                app:backgroundTint="@color/toggle_bg" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_major"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/severity_major"
-                android:textColor="@color/title"
-                app:backgroundTint="@color/toggle_button" />
+                android:textColor="@color/toggle_txt"
+                app:backgroundTint="@color/toggle_bg" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <com.google.android.material.button.MaterialButton
