@@ -8,4 +8,5 @@
     <string name="severity_minor">Minor</string>
     <string name="severity_moderate">Moderate</string>
     <string name="severity_major">Major</string>
+    <string name="submit_btn">Submit</string>
 </resources>
