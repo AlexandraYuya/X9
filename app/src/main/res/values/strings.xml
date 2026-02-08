@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">X9</string>
+    <string name="report_title">Report Title</string>
+    <string name="report_location">Report Location</string>
+    <string name="report_date">Report Date</string>
+    <string name="report_type">Report Type</string>
+    <string name="report_description">Report Description</string>
+    <string name="severity_minor">minor</string>
+    <string name="severity_moderate">moderate</string>
+    <string name="severity_major">major</string>
+</resources>
