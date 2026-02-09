@@ -42,10 +42,12 @@ class MainActivity : AppCompatActivity() {
             if(!validateInput()) return@setOnClickListener
 
             val checkedId = binding.buttonToggleGroup.checkedButtonId
+
             if(checkedId == View.NO_ID) {
                 Toast.makeText(this, "Please select a severity level", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             val severity = when (checkedId) {
                 R.id.button_minor -> "Minor"
                 R.id.button_moderate -> "Moderate"
@@ -83,10 +85,10 @@ class MainActivity : AppCompatActivity() {
         var ok = true
 
         if(reportTitle.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
-        if(reportLocation.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
-        if(reportDate.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
-        if(reportType.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
-        if(reportDescription.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
+        if(reportLocation.isBlank()) {binding.reportLocationLayout.error = "Required"; ok = false }
+        if(reportDate.isBlank()) {binding.reportDateLayout.error = "Required"; ok = false }
+        if(reportType.isBlank()) {binding.reportTypeLayout.error = "Required"; ok = false }
+        if(reportDescription.isBlank()) {binding.reportDescriptionLayout.error = "Required"; ok = false }
 
         return ok
     }
