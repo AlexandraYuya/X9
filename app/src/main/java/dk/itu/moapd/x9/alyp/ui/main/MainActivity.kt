@@ -14,10 +14,9 @@ import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
-
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
+    private val reports = mutableListOf<Report>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,21 +39,55 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.submitBtn.setOnClickListener { view: View ->
-            val reportTitle = binding.reportTitleInput.getText().toString()
-            val reportLocation = binding.reportLocationInput.getText().toString()
-            val reportDate = binding.reportDateInput.getText().toString()
-            val reportType = binding.reportTypeInput.getText().toString()
-            val reportDescription = binding.reportDescriptionInput.getText().toString()
-            val severityButton = binding.buttonToggleGroup.checkedButtonId.toString()
+            if(!validateInput()) return@setOnClickListener
 
-            val inputData =
-                "report title: $reportTitle \n " +
-                        "report location: $reportLocation \n " +
-                        "report date: $reportDate \n " +
-                        "report type: $reportType \n " +
-                        "report description: $reportDescription"
-            Toast.makeText(this, inputData, Toast.LENGTH_SHORT).show()
+            val checkedId = binding.buttonToggleGroup.checkedButtonId
+            if(checkedId == View.NO_ID) {
+                Toast.makeText(this, "Please select a severity level", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val severity = when (checkedId) {
+                R.id.button_minor -> "Minor"
+                R.id.button_moderate -> "Moderate"
+                R.id.button_major -> "Major"
+                else -> "Unknown"
+            }
 
+            val report = Report(
+                title = binding.reportTitleInput.text.toString().trim(),
+                location = binding.reportLocationInput.text.toString().trim(),
+                date = binding.reportDateInput.text.toString().trim(),
+                type = binding.reportTypeInput.text.toString().trim(),
+                description = binding.reportDescriptionInput.text.toString().trim(),
+                severity = severity
+            )
+            reports.add(report)
+            Toast.makeText(this, report.toString(), Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "Report stored, Success!")
         }
+    }
+
+    private fun validateInput(): Boolean {
+        val reportTitle = binding.reportTitleInput.text?.toString()?.trim().orEmpty()
+        val reportLocation = binding.reportLocationInput.text?.toString()?.trim().orEmpty()
+        val reportDate = binding.reportDateInput.text?.toString()?.trim().orEmpty()
+        val reportType = binding.reportTypeInput.text?.toString()?.trim().orEmpty()
+        val reportDescription = binding.reportDescriptionInput.text?.toString()?.trim().orEmpty()
+
+        binding.reportTitleLayout.error = null
+        binding.reportLocationLayout.error = null
+        binding.reportDateLayout.error = null
+        binding.reportTypeLayout.error = null
+        binding.reportDescriptionLayout.error = null
+
+        var ok = true
+
+        if(reportTitle.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
+        if(reportLocation.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
+        if(reportDate.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
+        if(reportType.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
+        if(reportDescription.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
+
+        return ok
     }
 }
