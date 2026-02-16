@@ -13,30 +13,16 @@
         android:orientation="vertical"
         tools:context=".ui.main.MainActivity">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-           />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_title_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:boxBackgroundColor="@color/input"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintTop_toTopOf="@id/main"
             app:startIconDrawable="@drawable/car">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -55,7 +41,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            app:boxBackgroundColor="@color/input"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +64,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            app:boxBackgroundColor="@color/input"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,12 +72,14 @@
             app:startIconDrawable="@drawable/calendar">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/report_date_input"
+                android:id="@+id/report_date_time_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/report_date_hint"
-                android:inputType="date"
-                android:paddingStart="45dp" />
+                android:inputType="datetime"
+                android:paddingStart="45dp"
+                tools:text="Wed May 11 11:56 EST 2022"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -105,7 +91,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/report_type_hint"
-            app:boxBackgroundColor="@color/input"
             app:boxBackgroundMode="filled"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +112,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            app:boxBackgroundColor="@color/input"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,24 +145,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/severity_minor"
+                app:backgroundTint="@color/toggle_bg"
                 android:textColor="@color/toggle_txt"
-                app:backgroundTint="@color/toggle_bg" />
+                app:strokeColor="?attr/colorOutline"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_moderate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/severity_moderate"
+                app:backgroundTint="@color/toggle_bg"
                 android:textColor="@color/toggle_txt"
-                app:backgroundTint="@color/toggle_bg" />
+                app:strokeColor="?attr/colorOutline"
+                 />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_major"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/severity_major"
+                app:backgroundTint="@color/toggle_bg"
                 android:textColor="@color/toggle_txt"
-                app:backgroundTint="@color/toggle_bg" />
+                app:strokeColor="?attr/colorOutline"
+                />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <com.google.android.material.button.MaterialButton
@@ -189,7 +179,6 @@
             android:layout_marginBottom="25dp"
             android:text="@string/submit_btn"
             android:textSize="20sp"
-            app:backgroundTint="@color/submit_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_toggle_group" />

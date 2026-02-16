@@ -1,9 +1,13 @@
 package dk.itu.moapd.x9.alyp.ui.main
 
+import java.util.Date
+import java.util.UUID
+
 data class Report(
+    val id: UUID,
     val title: String,
     val location: String,
-    val date: String,
+    val date: Date,
     val type: String,
     val description: String,
     val severity: String,
