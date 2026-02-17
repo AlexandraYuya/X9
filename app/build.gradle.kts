@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -35,6 +36,9 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
 

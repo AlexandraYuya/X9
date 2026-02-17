@@ -2,8 +2,13 @@ package dk.itu.moapd.x9.alyp.ui.main
 
 import java.util.Date
 import java.util.UUID
+import java.io.Serializable
 
-data class Report(
+/**
+ * Data class made serializable to be transfered via intents
+ * TODO if possible make it parcelizable instead of serializable
+ */
+data class Report (
     val id: UUID,
     val title: String,
     val location: String,
@@ -11,4 +16,4 @@ data class Report(
     val type: String,
     val description: String,
     val severity: String,
-)
+) : Serializable

@@ -1,10 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReportActivity">
+    android:fillViewport="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.main.MainActivity">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/report_title_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:boxBackgroundMode="filled"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/main"
+            app:startIconDrawable="@drawable/car">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/report_title_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/report_title_hint"
+                android:inputType="textCapSentences|textAutoCorrect"
+                android:paddingStart="45dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/report_location_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:boxBackgroundMode="filled"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/report_title_layout"
+            app:startIconDrawable="@drawable/location">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/report_location_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/report_location_hint"
+                android:inputType="textCapSentences|textPostalAddress|textAutoCorrect"
+                android:paddingStart="45dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/report_date_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:boxBackgroundMode="filled"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/report_location_layout"
+            app:startIconDrawable="@drawable/calendar">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/report_date_time_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/report_date_hint"
+                android:inputType="datetime"
+                android:paddingStart="45dp"
+                tools:text="Wed May 11 11:56 EST 2022"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/report_type_layout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/report_type_hint"
+            app:boxBackgroundMode="filled"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/report_date_layout"
+            app:startIconDrawable="@drawable/croissant">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/report_type_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textAutoCorrect"
+                android:paddingStart="45dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/report_description_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            app:boxBackgroundMode="filled"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/report_type_layout"
+            app:startIconDrawable="@drawable/description">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/report_description_input"
+                android:layout_width="match_parent"
+                android:layout_height="98dp"
+                android:hint="@string/report_description_hint"
+                android:inputType="textMultiLine|textAutoCorrect"
+                android:paddingStart="45dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/button_toggle_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:singleSelection="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/report_description_layout">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_minor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/severity_minor"
+                app:backgroundTint="@color/toggle_bg"
+                android:textColor="@color/toggle_txt"
+                app:strokeColor="?attr/colorOutline"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_moderate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/severity_moderate"
+                app:backgroundTint="@color/toggle_bg"
+                android:textColor="@color/toggle_txt"
+                app:strokeColor="?attr/colorOutline"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_major"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/severity_major"
+                app:backgroundTint="@color/toggle_bg"
+                android:textColor="@color/toggle_txt"
+                app:strokeColor="?attr/colorOutline"
+                />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submit_btn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="25dp"
+            android:text="@string/submit_btn"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_toggle_group" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
