@@ -1,13 +1,11 @@
 package dk.itu.moapd.x9.alyp.ui.main
 
-import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.color.DynamicColors
 import dk.itu.moapd.x9.alyp.ReportActivity
@@ -27,6 +25,19 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == RESULT_OK) {
             val report = result.data?.getSerializableExtra(EXTRA_REPORT_DATA) as? Report
+
+            val reportList = arrayListOf<Report>()
+            if (report != null) {
+                reportList.add(report)
+            }
+
+            ArrayAdapter<Report>(
+                this,
+                android.R.layout.simple_list_item_1,
+                reportList
+            ).also { adapter ->
+                binding.listView.setAdapter(adapter)
+            }
             Toast.makeText(this, report?.toString() ?: "No report returned", Toast.LENGTH_LONG).show()
         }
     }
