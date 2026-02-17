@@ -6,19 +6,21 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dk.itu.moapd.x9.alyp.databinding.ActivityReportBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import dk.itu.moapd.x9.alyp.Report
 
 private const val TAG = "ReportActivity"
 private const val EXTRA_REPORT_DATA = "dk.itu.moapd.x9.alyp.report_data"
 
 class ReportActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReportBinding
-    private val reports = mutableListOf<Report>()
+    private val reportViewModel: ReportViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,16 +72,14 @@ class ReportActivity : AppCompatActivity() {
                 severity = severity
             )
 
-            reports.add(report)
+            reportViewModel.addReport(report)
             Log.d(TAG, "Report stored, Success!")
 
             /**
              * Pass data from child to parent activity via extra intent
              */
             if(validateInput()) {
-                val intent = Intent(this, MainActivity::class.java).apply {
-                    putExtra(EXTRA_REPORT_DATA, report)
-                }
+                val intent = Intent().putExtra(EXTRA_REPORT_DATA, report)
                 setResult(RESULT_OK, intent)
                 finish()
             }

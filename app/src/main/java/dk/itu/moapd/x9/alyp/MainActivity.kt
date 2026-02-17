@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.color.DynamicColors
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
 
@@ -22,24 +24,26 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * launcher to recieve data from child to parent activity.
+     * Use adapter to populate list from list of reports
       */
-    private val cheatLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { result ->
+    private val cheatLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == RESULT_OK) {
             val report = result.data?.getSerializableExtra(EXTRA_REPORT_DATA) as? Report
 
             if (report != null) {
-                reportViewModel.setReportList(report)
+                reportViewModel.addReport(report)
+                Toast.makeText(this, "report stored successfully!", Toast.LENGTH_LONG).show()
+            }else {
+                Toast.makeText(this, "No report stored", Toast.LENGTH_LONG).show()
             }
 
-            ArrayAdapter<Report>(
-                this,
-                R.layout.simple_list_item_1,
-                reportViewModel.getReportList
-            ).also { adapter ->
-                binding.listView.setAdapter(adapter)
-            }
-            Toast.makeText(this, report?.toString() ?: "No report returned", Toast.LENGTH_LONG).show()
+//            ArrayAdapter(
+//                this,
+//                R.layout.simple_list_item_1,
+//                reportViewModel.getReportList
+//            ).also { adapter ->
+////                binding.fragmentContainer.setAdapter(adapter)
+//            }
         }
     }
 
@@ -55,6 +59,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ReportActivity::class.java)
             cheatLauncher.launch(intent)
         }
+
+//        binding.listView.setOnItemClickListener { parent, view, position, id ->
+//            val item = parent.getItemAtPosition(position)
+//            ReportFragment().show(supportFragmentManager, "REPORT_DIALOG")
+//        }
     }
 
     override fun onStart() {

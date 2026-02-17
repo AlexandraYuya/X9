@@ -1,0 +1,59 @@
+package dk.itu.moapd.x9.alyp
+
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
+import kotlin.getValue
+
+
+private const val TAG = "ReportListFragment"
+class ReportListFragment : Fragment() {
+    private var _binding: FragmentReportListBinding? = null
+    private val binding
+        get() = checkNotNull(_binding) {
+            "Cannot access binding because it is null. Is the view visible?"
+        }
+    val reportViewModel: ReportViewModel by activityViewModels()
+    private lateinit var adapter: ReportListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "Total reports: ${reportViewModel.reports.value?.size}")
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentReportListBinding.inflate(inflater, container, false)
+//        binding.reportListFragment.layoutManager = LinearLayoutManager(context)
+//        val reports = reportViewModel.reports
+//        val adapter = ReportListAdapter(reports)
+//        binding.reportListFragment.adapter = adapter
+
+        return binding.root
+    }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    adapter = ReportListAdapter(emptyList())
+    binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
+    binding.reportListFragment.adapter = adapter
+
+    reportViewModel.reports.observe(viewLifecycleOwner) { reports ->
+        adapter.update(reports)
+    }
+}
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

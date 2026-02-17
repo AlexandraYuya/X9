@@ -1,21 +1,33 @@
 package dk.itu.moapd.x9.alyp
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import java.util.Date
 import java.util.UUID
 
-private const val TAG = "ReportViewModel"
-
 class ReportViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    private val reportList = arrayListOf<Report>(
-        Report(UUID.randomUUID(), "demo report", "ITU", Date(), "stuDying", "lllorem ipsum", "")
-    )
+    private val _reports = MutableLiveData<List<Report>>()
+    val reports: LiveData<List<Report>> = _reports
 
-    val getReportList: List<Report>
-        get() = reportList
+    init {
+        val initial = List(5) { i ->
+            Report(
+                id = UUID.randomUUID(),
+                title = "Report #$i",
+                location = "ITU",
+                date = Date(),
+                type = "stuDying",
+                description = "lorem ipsum",
+                severity = "moderate"
+            )
+        }
+        _reports.value = initial
+    }
 
-    fun setReportList(report: Report) {
-        reportList.add(report)
+    fun addReport(report: Report) {
+        val current = _reports.value.orEmpty()
+        _reports.value = current + report
     }
 }
