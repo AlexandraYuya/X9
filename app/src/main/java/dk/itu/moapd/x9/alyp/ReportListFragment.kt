@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ReportFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
 import kotlin.getValue
@@ -33,17 +34,17 @@ class ReportListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentReportListBinding.inflate(inflater, container, false)
-//        binding.reportListFragment.layoutManager = LinearLayoutManager(context)
-//        val reports = reportViewModel.reports
-//        val adapter = ReportListAdapter(reports)
-//        binding.reportListFragment.adapter = adapter
-
         return binding.root
     }
+
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    adapter = ReportListAdapter(emptyList())
+    adapter = ReportListAdapter(emptyList()) { report ->
+        ReportDialogFragment
+            .newInstance(report)
+            .show(parentFragmentManager, "REPORT_DIALOG")
+    }
     binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
     binding.reportListFragment.adapter = adapter
 

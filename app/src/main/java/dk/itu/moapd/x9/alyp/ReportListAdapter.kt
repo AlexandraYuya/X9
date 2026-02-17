@@ -11,12 +11,7 @@ class ReportHolder(
 
 }
 
-class ReportListAdapter(private var reports: List<Report>) : RecyclerView.Adapter<ReportHolder>() {
-
-    fun update(newReports: List<Report>) {
-        reports = newReports
-        notifyDataSetChanged()
-    }
+class ReportListAdapter(private var reports: List<Report>, private val onItemClick: (Report) -> Unit) : RecyclerView.Adapter<ReportHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,14 +20,21 @@ class ReportListAdapter(private var reports: List<Report>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ReportHolder, position: Int) {
-        val crime = reports[position]
+        val report = reports[position]
         holder.apply {
-            binding.reportTitle.text = crime.title
-            binding.reportType.text = crime.type
-            binding.reportSeverity.text = crime.severity
-            binding.reportDate.text = crime.date.toString()
+            binding.reportTitle.text = report.title
+            binding.reportDate.text = report.date.toString()
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClick(report)
         }
     }
 
     override fun getItemCount() = reports.size
+
+    fun update(newReports: List<Report>) {
+        reports = newReports
+        notifyDataSetChanged()
+    }
 }

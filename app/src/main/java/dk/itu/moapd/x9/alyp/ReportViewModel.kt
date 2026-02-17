@@ -12,7 +12,7 @@ class ReportViewModel(private val savedStateHandle: SavedStateHandle) : ViewMode
     val reports: LiveData<List<Report>> = _reports
 
     init {
-        val initial = List(5) { i ->
+        val initial = List(1) { i ->
             Report(
                 id = UUID.randomUUID(),
                 title = "Report #$i",
