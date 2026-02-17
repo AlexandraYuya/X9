@@ -1,4 +1,4 @@
-package dk.itu.moapd.x9.alyp.ui.main
+package dk.itu.moapd.x9.alyp
 
 import java.util.Date
 import java.util.UUID

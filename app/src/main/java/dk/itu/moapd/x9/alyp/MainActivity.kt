@@ -1,19 +1,21 @@
-package dk.itu.moapd.x9.alyp.ui.main
+package dk.itu.moapd.x9.alyp
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.color.DynamicColors
-import dk.itu.moapd.x9.alyp.ReportActivity
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val reportViewModel: ReportViewModel by viewModels()
     companion object {
         private const val EXTRA_REPORT_DATA = "dk.itu.moapd.x9.alyp.report_data"
     }
@@ -26,15 +28,14 @@ class MainActivity : AppCompatActivity() {
         if(result.resultCode == RESULT_OK) {
             val report = result.data?.getSerializableExtra(EXTRA_REPORT_DATA) as? Report
 
-            val reportList = arrayListOf<Report>()
             if (report != null) {
-                reportList.add(report)
+                reportViewModel.setReportList(report)
             }
 
             ArrayAdapter<Report>(
                 this,
-                android.R.layout.simple_list_item_1,
-                reportList
+                R.layout.simple_list_item_1,
+                reportViewModel.getReportList
             ).also { adapter ->
                 binding.listView.setAdapter(adapter)
             }
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "OnCreate(Bundle?) called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d(TAG, "Got a ReportViewModel: $reportViewModel")
 
         binding.newReportBtn.setOnClickListener { view ->
             val intent = Intent(this, ReportActivity::class.java)

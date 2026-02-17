@@ -1,20 +1,13 @@
 package dk.itu.moapd.x9.alyp
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.annotation.UiContext
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import dk.itu.moapd.x9.alyp.databinding.ActivityReportBinding
-import dk.itu.moapd.x9.alyp.ui.main.MainActivity
-import dk.itu.moapd.x9.alyp.ui.main.Report
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
