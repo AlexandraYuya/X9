@@ -8,12 +8,12 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.color.DynamicColors
 import dk.itu.moapd.x9.alyp.databinding.ActivityReportBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
-import dk.itu.moapd.x9.alyp.Report
 
 private const val TAG = "ReportActivity"
 private const val EXTRA_REPORT_DATA = "dk.itu.moapd.x9.alyp.report_data"
@@ -24,6 +24,7 @@ class ReportActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DynamicColors.applyToActivityIfAvailable(this)
         binding = ActivityReportBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -46,11 +47,11 @@ class ReportActivity : AppCompatActivity() {
 
 
         binding.submitBtn.setOnClickListener { view: View ->
-            if(!validateInput()) return@setOnClickListener
+            if (!validateInput()) return@setOnClickListener
 
             val checkedId = binding.buttonToggleGroup.checkedButtonId
 
-            if(checkedId == View.NO_ID) {
+            if (checkedId == View.NO_ID) {
                 Toast.makeText(this, "Please select a severity level", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -78,7 +79,7 @@ class ReportActivity : AppCompatActivity() {
             /**
              * Pass data from child to parent activity via extra intent
              */
-            if(validateInput()) {
+            if (validateInput()) {
                 val intent = Intent().putExtra(EXTRA_REPORT_DATA, report)
                 setResult(RESULT_OK, intent)
                 finish()
@@ -101,11 +102,21 @@ class ReportActivity : AppCompatActivity() {
 
         var ok = true
 
-        if(reportTitle.isBlank()) {binding.reportTitleLayout.error = "Required"; ok = false }
-        if(reportLocation.isBlank()) {binding.reportLocationLayout.error = "Required"; ok = false }
-        if(reportDate.isBlank()) {binding.reportDateLayout.error = "Required"; ok = false }
-        if(reportType.isBlank()) {binding.reportTypeLayout.error = "Required"; ok = false }
-        if(reportDescription.isBlank()) {binding.reportDescriptionLayout.error = "Required"; ok = false }
+        if (reportTitle.isBlank()) {
+            binding.reportTitleLayout.error = "Required"; ok = false
+        }
+        if (reportLocation.isBlank()) {
+            binding.reportLocationLayout.error = "Required"; ok = false
+        }
+        if (reportDate.isBlank()) {
+            binding.reportDateLayout.error = "Required"; ok = false
+        }
+        if (reportType.isBlank()) {
+            binding.reportTypeLayout.error = "Required"; ok = false
+        }
+        if (reportDescription.isBlank()) {
+            binding.reportDescriptionLayout.error = "Required"; ok = false
+        }
 
         return ok
     }

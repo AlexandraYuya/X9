@@ -1,18 +1,16 @@
 package dk.itu.moapd.x9.alyp
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.color.DynamicColors
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
+import dk.itu.moapd.x9.alyp.R
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -36,20 +34,12 @@ class MainActivity : AppCompatActivity() {
             }else {
                 Toast.makeText(this, "No report stored", Toast.LENGTH_LONG).show()
             }
-
-//            ArrayAdapter(
-//                this,
-//                R.layout.simple_list_item_1,
-//                reportViewModel.getReportList
-//            ).also { adapter ->
-////                binding.fragmentContainer.setAdapter(adapter)
-//            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        DynamicColors.applyToActivityIfAvailable(this)
         super.onCreate(savedInstanceState)
+        DynamicColors.applyToActivityIfAvailable(this)
         Log.d(TAG, "OnCreate(Bundle?) called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -64,6 +54,16 @@ class MainActivity : AppCompatActivity() {
 //            val item = parent.getItemAtPosition(position)
 //            ReportFragment().show(supportFragmentManager, "REPORT_DIALOG")
 //        }
+
+
+        // Access fragment manager
+        val fm = supportFragmentManager
+
+        //Access fragment navigation
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragment_container_view
+            ) as NavHostFragment
+        val navController = navHostFragment.navController
     }
 
     override fun onStart() {

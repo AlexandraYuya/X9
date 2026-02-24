@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_report_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        tools:context=".ReportActivity">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_title_layout"
@@ -78,7 +79,7 @@
                 android:hint="@string/report_date_hint"
                 android:inputType="datetime"
                 android:paddingStart="45dp"
-                tools:text="Wed May 11 11:56 EST 2022"
+                tools:text="Wed May 11 11:56 2022"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 

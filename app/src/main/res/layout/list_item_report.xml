@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    >
 
     <TextView
         android:id="@+id/report_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Report Title" />
+        android:text="@string/report_title"
+        android:textSize="20sp"
+        app:drawableStartCompat="@drawable/assignment" />
 
     <TextView
         android:id="@+id/report_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Report Date" />
+        android:text="@string/report_date" />
 </LinearLayout>

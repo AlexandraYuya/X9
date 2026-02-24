@@ -6,9 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import dk.itu.moapd.x9.alyp.databinding.ListItemReportBinding
 
 class ReportHolder(
-    val binding: ListItemReportBinding
+    private val binding: ListItemReportBinding
 ) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(report: Report, onItemClick: (Report) -> Unit) {
+        binding.reportTitle.text = report.title
+        binding.reportDate.text = report.date.toString()
 
+        binding.root.setOnClickListener {
+            onItemClick(report)
+        }
+    }
 }
 
 class ReportListAdapter(private var reports: List<Report>, private val onItemClick: (Report) -> Unit) : RecyclerView.Adapter<ReportHolder>() {
@@ -21,14 +28,7 @@ class ReportListAdapter(private var reports: List<Report>, private val onItemCli
 
     override fun onBindViewHolder(holder: ReportHolder, position: Int) {
         val report = reports[position]
-        holder.apply {
-            binding.reportTitle.text = report.title
-            binding.reportDate.text = report.date.toString()
-        }
-
-        holder.itemView.setOnClickListener {
-            onItemClick(report)
-        }
+        holder.bind(report, onItemClick)
     }
 
     override fun getItemCount() = reports.size

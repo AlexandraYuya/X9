@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ReportFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
 import kotlin.getValue
 
-
 private const val TAG = "ReportListFragment"
-class ReportListFragment : Fragment() {
+class ReportListFragment : Fragment(R.layout.fragment_report_list) {
     private var _binding: FragmentReportListBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
@@ -29,17 +28,13 @@ class ReportListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentReportListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = FragmentReportListBinding.inflate(inflater, container, false).also {
+        _binding = it
+    }.root
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
     adapter = ReportListAdapter(emptyList()) { report ->
         ReportDialogFragment
             .newInstance(report)
