@@ -12,14 +12,16 @@
     <string name="view_reports">View Reports</string>
     <string name="welcome_txt">Welcome to X9 Let’s Begin!</string>
     <string name="create_report_btn">Create a new report</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="report_title">Report Title</string>
+    <string name="report_date">Report Date</string>
+    <string name="nav_report_list">List</string>
+    <string name="nav_report_form">Form</string>
+    <string name="nav_report_map">map</string>
 
     <string-array name="report_types_array">
         <item>Accident</item>
         <item>Speed Check</item>
         <item>Traffic</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="report_title">Report Title</string>
-    <string name="report_date">Report Date</string>
 </resources>

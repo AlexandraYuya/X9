@@ -8,6 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.color.DynamicColors
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
 import dk.itu.moapd.x9.alyp.R
@@ -15,6 +17,7 @@ import dk.itu.moapd.x9.alyp.R
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private val reportViewModel: ReportViewModel by viewModels()
     companion object {
         private const val EXTRA_REPORT_DATA = "dk.itu.moapd.x9.alyp.report_data"
@@ -45,16 +48,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         Log.d(TAG, "Got a ReportViewModel: $reportViewModel")
 
-        binding.newReportBtn.setOnClickListener { view ->
-            val intent = Intent(this, ReportActivity::class.java)
-            cheatLauncher.launch(intent)
-        }
-
-//        binding.listView.setOnItemClickListener { parent, view, position, id ->
-//            val item = parent.getItemAtPosition(position)
-//            ReportFragment().show(supportFragmentManager, "REPORT_DIALOG")
+//        binding.newReportBtn.setOnClickListener { view ->
+//            val intent = Intent(this, ReportActivity::class.java)
+//            cheatLauncher.launch(intent)
 //        }
-
 
         // Access fragment manager
         val fm = supportFragmentManager
@@ -64,6 +61,16 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.fragment_container_view
             ) as NavHostFragment
         val navController = navHostFragment.navController
+
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        setSupportActionBar(binding.toolbar)
+        setupNavigation(navController)
+    }
+
+    private fun setupNavigation(navController: androidx.navigation.NavController) {
+        // Portrait: bottom navigation. Landscape: navigation rail.
+        binding.contentMain.bottomNavigation.setupWithNavController(navController)
     }
 
     override fun onStart() {

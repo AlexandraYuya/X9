@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragment_report_list"
+        android:enabled="true"
+        android:icon="@drawable/assignment"
+        android:title="@string/nav_report_list"/>
+    <item
+        android:id="@+id/fragment_report_form"
+        android:enabled="true"
+        android:icon="@drawable/description"
+        android:title="@string/nav_report_form"/>
+    <item
+        android:id="@+id/fragment_report_map"
+        android:enabled="true"
+        android:icon="@drawable/location"
+        android:title="@string/nav_report_map"/>
+</menu>
