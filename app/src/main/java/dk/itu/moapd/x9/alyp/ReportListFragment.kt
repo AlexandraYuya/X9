@@ -13,6 +13,7 @@ import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
 import kotlin.getValue
 
 private const val TAG = "ReportListFragment"
+
 class ReportListFragment : Fragment(R.layout.fragment_report_list) {
     private var _binding: FragmentReportListBinding? = null
     private val binding
@@ -25,28 +26,42 @@ class ReportListFragment : Fragment(R.layout.fragment_report_list) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "Total reports: ${reportViewModel.reports.value?.size}")
+        Log.d(TAG, "onCreate() called")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = FragmentReportListBinding.inflate(inflater, container, false).also {
         _binding = it
+        Log.d(TAG, "onCreateView() called")
     }.root
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    adapter = ReportListAdapter(emptyList()) { report ->
-        ReportDialogFragment
-            .newInstance(report)
-            .show(parentFragmentManager, "REPORT_DIALOG")
-    }
-    binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
-    binding.reportListFragment.adapter = adapter
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated() called")
+        // Creates a new instance of the report alert dialog and displays it
+        adapter = ReportListAdapter(emptyList()) { report ->
+            ReportDialogFragment
+                .newInstance(report)
+                .show(parentFragmentManager, "REPORT_DIALOG")
+        }
+        binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
+        binding.reportListFragment.adapter = adapter
 
-    reportViewModel.reports.observe(viewLifecycleOwner) { reports ->
-        adapter.update(reports)
+        reportViewModel.reports.observe(viewLifecycleOwner) { reports ->
+            adapter.update(reports)
+        }
     }
-}
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop() called")
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

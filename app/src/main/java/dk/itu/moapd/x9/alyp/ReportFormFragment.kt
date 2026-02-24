@@ -35,7 +35,7 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate()")
+        Log.d(TAG, "onCreate() called")
     }
 
 //    override fun onCreateView(
@@ -47,6 +47,7 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated() called")
         _binding = FragmentReportFormBinding.bind(view)
         // dropdown menu for report types
         val types = resources.getStringArray(R.array.report_types_array)
@@ -105,6 +106,7 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
 
         /**
          * Pass data from child to parent activity via extra intent
+         * redundant as I refactored to fragment navigation instead of activity
          */
 //        if (validateInput()) {
 //            val intent = Intent().putExtra(EXTRA_REPORT_DATA, report)
@@ -148,6 +150,16 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
         return ok
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop() called")
+    }
+    
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
