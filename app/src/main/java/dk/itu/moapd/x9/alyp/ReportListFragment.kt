@@ -14,7 +14,7 @@ import kotlin.getValue
 
 private const val TAG = "ReportListFragment"
 
-class ReportListFragment : Fragment(R.layout.fragment_report_list) {
+class ReportListFragment : Fragment() {
     private var _binding: FragmentReportListBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
@@ -29,8 +29,7 @@ class ReportListFragment : Fragment(R.layout.fragment_report_list) {
         Log.d(TAG, "onCreate() called")
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = FragmentReportListBinding.inflate(inflater, container, false).also {
         _binding = it
         Log.d(TAG, "onCreateView() called")
@@ -39,6 +38,7 @@ class ReportListFragment : Fragment(R.layout.fragment_report_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
+
         // Creates a new instance of the report alert dialog and displays it
         adapter = ReportListAdapter(emptyList()) { report ->
             ReportDialogFragment

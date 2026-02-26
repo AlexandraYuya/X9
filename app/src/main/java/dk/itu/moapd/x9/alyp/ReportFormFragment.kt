@@ -24,7 +24,7 @@ import kotlin.getValue
 
 private const val TAG = "ReportFormFragment"
 
-class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
+class ReportFormFragment : Fragment() {
     private var _binding: FragmentReportFormBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
@@ -38,17 +38,17 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
         Log.d(TAG, "onCreate() called")
     }
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View = FragmentReportFormBinding.inflate(inflater, container, false).also {
-//        _binding = it
-//    }.root
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = FragmentReportFormBinding.inflate(inflater, container, false).also {
+        _binding = it
+    }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
-        _binding = FragmentReportFormBinding.bind(view)
+
         // dropdown menu for report types
         val types = resources.getStringArray(R.array.report_types_array)
         ArrayAdapter(
@@ -61,7 +61,6 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
 
         // format Date
         binding.reportDateTimeInput.setText(dateFormatter.format(Date()))
-
 
         binding.submitBtn.setOnClickListener { view: View ->
            submitReport()
@@ -104,15 +103,6 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
 
         Toast.makeText(requireContext(), "Report stored successfully!", Toast.LENGTH_SHORT).show()
 
-        /**
-         * Pass data from child to parent activity via extra intent
-         * redundant as I refactored to fragment navigation instead of activity
-         */
-//        if (validateInput()) {
-//            val intent = Intent().putExtra(EXTRA_REPORT_DATA, report)
-//            setResult(RESULT_OK, intent)
-//            finish()
-//        }
         findNavController().navigateUp()
     }
 
@@ -159,7 +149,7 @@ class ReportFormFragment : Fragment(R.layout.fragment_report_form) {
         super.onStop()
         Log.d(TAG, "onStop() called")
     }
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

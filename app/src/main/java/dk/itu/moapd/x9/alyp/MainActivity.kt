@@ -14,31 +14,6 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
-//    private val reportViewModel: ReportViewModel by viewModels()
-//    companion object {
-//        private const val EXTRA_REPORT_DATA = "dk.itu.moapd.x9.alyp.report_data"
-//    }
-
-    /**
-     * launcher to recieve data from child to parent activity.
-     * Use adapter to populate list from list of reports
-     *
-     * Uncommented as report activity changed to fragment,
-     * form fragment populates reportViewModel
-     * list fragment observes changes made to the reportViewModel
-      */
-//    private val cheatLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//        if(result.resultCode == RESULT_OK) {
-//            val report = result.data?.getSerializableExtra(EXTRA_REPORT_DATA) as? Report
-//
-//            if (report != null) {
-//                reportViewModel.addReport(report)
-//                Toast.makeText(this, "report stored successfully!", Toast.LENGTH_LONG).show()
-//            }else {
-//                Toast.makeText(this, "No report stored", Toast.LENGTH_LONG).show()
-//            }
-//        }
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +21,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "OnCreate(Bundle?) called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        Log.d(TAG, "Got a ReportViewModel: $reportViewModel")
-//        binding.newReportBtn.setOnClickListener { view ->
-//            val intent = Intent(this, ReportActivity::class.java)
-//            cheatLauncher.launch(intent)
-//        }
 
         // Access fragment manager
         val fm = supportFragmentManager

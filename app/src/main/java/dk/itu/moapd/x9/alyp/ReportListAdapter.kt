@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dk.itu.moapd.x9.alyp.databinding.ListItemReportBinding
 
 class ReportHolder(
-    private val binding: ListItemReportBinding
-) : RecyclerView.ViewHolder(binding.root) {
+    private val binding: ListItemReportBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(report: Report, onItemClick: (Report) -> Unit) {
         binding.reportTitle.text = report.title
         binding.reportDate.text = report.date.toString()
