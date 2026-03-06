@@ -1,7 +1,5 @@
 package dk.itu.moapd.x9.alyp
 
-import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -100,7 +98,7 @@ class ReportFormFragment : Fragment() {
 
         Toast.makeText(requireContext(), "Report stored successfully!", Toast.LENGTH_SHORT).show()
 
-        findNavController().navigateUp()
+        findNavController().navigate(R.id.action_reportFormFragment_to_reportListFragment)
     }
 
     private fun validateInput(): Boolean {

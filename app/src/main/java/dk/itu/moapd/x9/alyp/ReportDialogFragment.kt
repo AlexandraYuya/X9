@@ -14,7 +14,6 @@ class ReportDialogFragment : DialogFragment() {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report
 
         return activity?.let {
-            // Use the Builder class for convenient dialog construction.
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle(report.title)
             builder.setMessage(
@@ -24,7 +23,6 @@ class ReportDialogFragment : DialogFragment() {
                 "Severity: ${report.severity}\n" +
                 report.description
             ).setPositiveButton("OK", null)
-            // Create the AlertDialog object and return it.
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

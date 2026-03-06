@@ -8,18 +8,19 @@
     <fragment
         android:id="@+id/fragment_report_list"
         android:name="dk.itu.moapd.x9.alyp.ReportListFragment"
-        android:label="@string/hello_blank_fragment"
         tools:layout="@layout/fragment_report_list">
-        <action
-            android:id="@+id/action_reportListFragment_to_reportFormFragment"
-            app:destination="@+id/fragment_report_form"
-        />
+<!--        <action-->
+<!--            android:id="@+id/action_reportListFragment_to_reportFormFragment"-->
+<!--            app:destination="@+id/fragment_report_form"-->
+<!--        />-->
     </fragment>
 
     <fragment
         android:id="@+id/fragment_report_form"
         android:name="dk.itu.moapd.x9.alyp.ReportFormFragment"
-        android:label="@string/hello_blank_fragment"
         tools:layout="@layout/fragment_report_form">
+        <action
+            android:id="@+id/action_reportFormFragment_to_reportListFragment"
+            app:destination="@+id/fragment_report_list" />
     </fragment>
 </navigation>
