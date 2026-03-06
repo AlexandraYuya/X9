@@ -12,10 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.color.DynamicColors
-import dk.itu.moapd.x9.alyp.databinding.ActivityReportBinding
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
-import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

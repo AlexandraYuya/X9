@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -32,13 +33,21 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.1"
+    }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -66,4 +75,10 @@ dependencies {
     implementation(libs.firebase.ui.auth.v900)
     implementation(libs.facebook.android.sdk)
     implementation(libs.firebase.auth)
+    implementation("androidx.compose.foundation:foundation:1.10.4")
+    implementation("androidx.compose.runtime:runtime:1.10.4")
+    implementation("androidx.compose.ui:ui:1.10.4")
+    implementation("androidx.compose.ui:ui-tooling:1.10.4")
+    implementation("androidx.compose.material:material:1.10.4")
+    implementation("androidx.activity:activity-compose:1.12.4")
 }
