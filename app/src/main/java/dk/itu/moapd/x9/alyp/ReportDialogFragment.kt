@@ -7,9 +7,12 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 
+/**
+ * ReportDialogFragment represents an alart dialog that pops up when a report is clicked.
+ * Builder determines the content of the dialog.
+ */
 class ReportDialogFragment : DialogFragment() {
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report
 

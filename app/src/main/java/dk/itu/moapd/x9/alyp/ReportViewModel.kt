@@ -1,12 +1,11 @@
 package dk.itu.moapd.x9.alyp
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import java.util.Date
 import java.util.UUID
 
-class ReportViewModel() : ViewModel() {
+class ReportViewModel : ViewModel() {
     val reports: MutableLiveData<List<Report>> by lazy {
         MutableLiveData<List<Report>>()
     }

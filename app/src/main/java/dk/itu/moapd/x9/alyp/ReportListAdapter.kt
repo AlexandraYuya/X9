@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.moapd.x9.alyp.databinding.ListItemReportBinding
 
+/**
+ * ReportHolder represents one visible row, and listens for click event on the report
+ */
 class ReportHolder(
     private val binding: ListItemReportBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(report: Report, onItemClick: (Report) -> Unit) {
@@ -17,6 +20,13 @@ class ReportHolder(
     }
 }
 
+/**
+ * ReportListAdapter represents the full list of Report objects shown by the RecyclerView,
+ *  inflates one row layout and returns a ReportHolder.
+ *  Registers what report at what position was clicked.
+ *  Registers how many reports there are.
+ *  Updates report list when new reports are added.
+ */
 class ReportListAdapter(private var reports: List<Report>, private val onItemClick: (Report) -> Unit) : RecyclerView.Adapter<ReportHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportHolder {
@@ -32,8 +42,8 @@ class ReportListAdapter(private var reports: List<Report>, private val onItemCli
 
     override fun getItemCount() = reports.size
 
-    fun update(newReports: List<Report>) {
-        reports = newReports
+    fun update(newReport: List<Report>) {
+        reports = newReport
         notifyDataSetChanged()
     }
 }

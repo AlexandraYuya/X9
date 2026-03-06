@@ -19,6 +19,12 @@ import kotlin.getValue
 
 private const val TAG = "ReportFormFragment"
 
+/**
+ * ReportFormFragment represents the second fragment after the list fragment.
+ * Determines the input for the form fields.
+ * Validates input upon submitting before storing the new Report object.
+ * Navigates back to ReportListFragment upon successful submitting.
+ */
 class ReportFormFragment : Fragment() {
     private var _binding: FragmentReportFormBinding? = null
     private val binding
@@ -79,7 +85,7 @@ class ReportFormFragment : Fragment() {
             else -> "Unknown"
         }
 
-        // parse date at submit time
+        // parse date&time at submit time
         val dateTimeText = binding.reportDateTimeInput.text.toString().trim()
         val reportDate = dateFormatter.parse(dateTimeText) ?: Date()
 
@@ -124,6 +130,9 @@ class ReportFormFragment : Fragment() {
         }
         if (reportDate.isBlank()) {
             binding.reportDateLayout.error = "Required"; ok = false
+        }
+        if(!reportDate.matches(Regex("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"))) {
+            binding.reportDateLayout.error = "Format: yyyy-MM-dd HH:mm"; ok = false
         }
         if (reportType.isBlank()) {
             binding.reportTypeLayout.error = "Required"; ok = false

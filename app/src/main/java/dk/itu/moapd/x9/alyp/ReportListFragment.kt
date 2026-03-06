@@ -13,6 +13,11 @@ import kotlin.getValue
 
 private const val TAG = "ReportListFragment"
 
+/**
+ * ReportListFragment is the default fragment shown.
+ * Observes changes to the MutableLiveData List of reports for any changes.
+ * Calls the update method in the custom adapter with the new reports
+ */
 class ReportListFragment : Fragment() {
     private var _binding: FragmentReportListBinding? = null
     private val binding
@@ -38,7 +43,6 @@ class ReportListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
 
-        // Creates a new instance of the report alert dialog and displays it
         adapter = ReportListAdapter(emptyList()) { report ->
             ReportDialogFragment
                 .newInstance(report)
@@ -47,8 +51,8 @@ class ReportListFragment : Fragment() {
         binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
         binding.reportListFragment.adapter = adapter
 
-        reportViewModel.reports.observe(viewLifecycleOwner) { reports ->
-            adapter.update(reports)
+        reportViewModel.reports.observe(viewLifecycleOwner) { report ->
+            adapter.update(report)
         }
     }
 
