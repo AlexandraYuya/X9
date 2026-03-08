@@ -123,22 +123,26 @@ class ReportFormFragment : Fragment() {
         var ok = true
 
         if (reportTitle.isBlank()) {
-            binding.reportTitleLayout.error = "Required"; ok = false
+            binding.reportTitleLayout.error = "Required"
+            ok = false
         }
         if (reportLocation.isBlank()) {
-            binding.reportLocationLayout.error = "Required"; ok = false
+            binding.reportLocationLayout.error = "Required"
+            ok = false
         }
         if (reportDate.isBlank()) {
             binding.reportDateLayout.error = "Required"; ok = false
-        }
-        if(!reportDate.matches(Regex("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"))) {
-            binding.reportDateLayout.error = "Format: yyyy-MM-dd HH:mm"; ok = false
+        } else if(!reportDate.matches(Regex("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"))) {
+            binding.reportDateLayout.error = "Format: yyyy-MM-dd HH:mm"
+            ok = false
         }
         if (reportType.isBlank()) {
-            binding.reportTypeLayout.error = "Required"; ok = false
+            binding.reportTypeLayout.error = "Required"
+            ok = false
         }
         if (reportDescription.isBlank()) {
-            binding.reportDescriptionLayout.error = "Required"; ok = false
+            binding.reportDescriptionLayout.error = "Required"
+            ok = false
         }
 
         return ok

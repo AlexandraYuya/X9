@@ -2,13 +2,11 @@ package dk.itu.moapd.x9.alyp
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 
 /**
- * ReportDialogFragment represents an alart dialog that pops up when a report is clicked.
+ * ReportDialogFragment represents an alert dialog that pops up when a report is clicked.
  * Builder determines the content of the dialog.
  */
 class ReportDialogFragment : DialogFragment() {

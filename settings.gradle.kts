@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "X9"
 include(":app")
-include(":app:gpsservice")
