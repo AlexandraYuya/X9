@@ -48,12 +48,12 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.1.1"
     }
+}
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-            javaParameters.set(true)
-        }
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+        javaParameters.set(true)
     }
 }
 
