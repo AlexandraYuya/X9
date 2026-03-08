@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")
     alias(libs.plugins.compose.compiler)
 }
 
