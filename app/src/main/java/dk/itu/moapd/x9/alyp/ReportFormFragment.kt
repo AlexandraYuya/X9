@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -27,6 +28,7 @@ private const val TAG = "ReportFormFragment"
  */
 class ReportFormFragment : Fragment() {
     private var _binding: FragmentReportFormBinding? = null
+    private lateinit var auth: FirebaseAuth
     private val binding
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
@@ -44,6 +46,7 @@ class ReportFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = FragmentReportFormBinding.inflate(inflater, container, false).also {
         _binding = it
+        auth = FirebaseAuth.getInstance()
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +67,11 @@ class ReportFormFragment : Fragment() {
         binding.reportDateTimeInput.setText(dateFormatter.format(Date()))
 
         binding.submitBtn.setOnClickListener { view: View ->
-           submitReport()
+            if (auth.currentUser != null) {
+                submitReport()
+            }else {
+                Toast.makeText(context, "Log-in to submit a report", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

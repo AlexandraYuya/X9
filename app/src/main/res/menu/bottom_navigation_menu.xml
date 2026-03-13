@@ -11,9 +11,9 @@
         android:icon="@drawable/description"
         android:title="@string/nav_report_form"/>
 <!--    This is for future implementation once we need to navigate to a map UI-->
-<!--    <item-->
-<!--        android:id="@+id/fragment_report_map"-->
-<!--        android:enabled="true"-->
-<!--        android:icon="@drawable/location"-->
-<!--        android:title="@string/nav_report_map"/>-->
+    <item
+        android:id="@+id/fragment_report_map"
+        android:enabled="true"
+        android:icon="@drawable/location"
+        android:title="@string/nav_report_map"/>
 </menu>

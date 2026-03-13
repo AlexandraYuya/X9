@@ -55,4 +55,8 @@ class ReportViewModel : ViewModel() {
         val current = reports.value.orEmpty()
         reports.value = current + report
     }
+
+    fun clearReports() {
+        reports.value = emptyList()
+    }
 }

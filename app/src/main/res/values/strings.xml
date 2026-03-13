@@ -18,6 +18,8 @@
     <string name="nav_report_list">List</string>
     <string name="nav_report_form">Form</string>
     <string name="nav_report_map">map</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
 
     <string-array name="report_types_array">
         <item>Accident</item>
