@@ -64,16 +64,16 @@ class ReportListFragment : Fragment() {
         super.onStart()
         Log.d(TAG, "onStart() called")
 
-        job = viewLifecycleOwner.lifecycleScope.launch {
-            val reports = reportViewModel.loadReports()
-            binding.reportListFragment.adapter = ReportListAdapter(reports) {}
-        }
+//        job = viewLifecycleOwner.lifecycleScope.launch {
+//            val reports = reportViewModel.loadReports()
+//            binding.reportListFragment.adapter = ReportListAdapter(reports) {}
+//        }
     }
 
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop() called")
-        job?.cancel()
+//        job?.cancel()
     }
 
     override fun onDestroyView() {

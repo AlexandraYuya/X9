@@ -1,11 +1,17 @@
 package dk.itu.moapd.x9.alyp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.firebase.ui.auth.AuthUI
+import com.google.android.gms.auth.api.Auth
 import com.google.android.material.color.DynamicColors
+import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
@@ -20,11 +26,16 @@ private const val TAG = "MainActivity"
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         DynamicColors.applyToActivityIfAvailable(this)
         Log.d(TAG, "OnCreate(Bundle?) called")
+
+        auth = FirebaseAuth.getInstance()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -44,7 +55,21 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
+
+        auth.currentUser ?: startLoginActivity()
     }
+
+    private fun startLoginActivity() {
+        Intent(this, LoginActivity::class.java).apply {
+            startActivity(this)
+            finish()
+        }
+    }
+
+    private fun signOut() {
+        auth.signOut()
+    }
+
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume() called")

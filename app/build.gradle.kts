@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -90,6 +91,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity)
     debugImplementation(libs.androidx.fragment.testing.manifest)
     androidTestImplementation(libs.androidx.espresso.core.v361)
     androidTestImplementation(libs.androidx.fragment.testing)

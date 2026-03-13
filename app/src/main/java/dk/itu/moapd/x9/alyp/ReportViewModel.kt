@@ -17,27 +17,26 @@ class ReportViewModel : ViewModel() {
 
     init {
         Log.d(TAG, "init starting")
-        viewModelScope.launch {
-            Log.d(TAG, "coroutine launched")
-//            delay(5000)
-//            val initial = List(1) { i ->
-//                Report(
-//                    id = UUID.randomUUID(),
-//                    title = "Report #$i",
-//                    location = "ITU",
-//                    date = Date(),
-//                    type = "stuDying",
-//                    description = "lorem ipsum",
-//                    severity = "moderate"
-//                )
-//            }
-            reports.value = loadReports()
-            Log.d(TAG, "Loading reports finished")
-        }
+//        viewModelScope.launch {
+//            Log.d(TAG, "coroutine launched")
+            val initial = List(1) { i ->
+                Report(
+                    id = UUID.randomUUID(),
+                    title = "Report #$i",
+                    location = "ITU",
+                    date = Date(),
+                    type = "stuDying",
+                    description = "lorem ipsum",
+                    severity = "moderate"
+                )
+            }
+            reports.value = initial
+//            Log.d(TAG, "Loading reports finished")
+//        }
     }
     suspend fun loadReports(): List<Report> {
         val result = mutableListOf<Report>()
-        delay(5000)
+        delay(1000)
         val initial = List(1) { i ->
             Report(
                 id = UUID.randomUUID(),
