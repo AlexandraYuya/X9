@@ -7,11 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlin.getValue
 
 private const val TAG = "ReportListFragment"
@@ -28,7 +25,6 @@ class ReportListFragment : Fragment() {
             "Cannot access binding because it is null. Is the view visible?"
         }
     val reportViewModel: ReportViewModel by activityViewModels()
-    private var job: Job? = null
     private lateinit var adapter: ReportListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +50,16 @@ class ReportListFragment : Fragment() {
         }
         binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
         binding.reportListFragment.adapter = adapter
-
+        
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                val reports = reportViewModel.loadReports()
+//                binding.reportListFragment.adapter = ReportListAdapter(
+//                    reports,
+//                    onItemClick = TODO()
+//                )
+//            }
+//        }
         reportViewModel.reports.observe(viewLifecycleOwner) { report ->
             adapter.update(report)
         }
@@ -63,17 +68,11 @@ class ReportListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
-
-//        job = viewLifecycleOwner.lifecycleScope.launch {
-//            val reports = reportViewModel.loadReports()
-//            binding.reportListFragment.adapter = ReportListAdapter(reports) {}
-//        }
     }
 
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop() called")
-//        job?.cancel()
     }
 
     override fun onDestroyView() {
