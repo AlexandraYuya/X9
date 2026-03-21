@@ -7,8 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 private const val TAG = "ReportListFragment"
@@ -51,17 +55,12 @@ class ReportListFragment : Fragment() {
         binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
         binding.reportListFragment.adapter = adapter
         
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                val reports = reportViewModel.loadReports()
-//                binding.reportListFragment.adapter = ReportListAdapter(
-//                    reports,
-//                    onItemClick = TODO()
-//                )
-//            }
-//        }
-        reportViewModel.reports.observe(viewLifecycleOwner) { report ->
-            adapter.update(report)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                reportViewModel.reports.collect { report ->
+                    adapter.update(report)
+                }
+            }
         }
     }
 

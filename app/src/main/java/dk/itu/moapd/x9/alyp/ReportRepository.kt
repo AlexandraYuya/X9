@@ -3,6 +3,7 @@ package dk.itu.moapd.x9.alyp
 import android.content.Context
 import androidx.room.Room
 import dk.itu.moapd.x9.alyp.database.ReportDatabase
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 /**
@@ -21,7 +22,7 @@ class ReportRepository private constructor(context: Context){
         DATABASE_NAME
     ).build()
 
-    suspend fun getReports(): List<Report> = database.reportDao().getReports()
+    fun getReports(): Flow<List<Report>> = database.reportDao().getReports()
     suspend fun getReport(id: UUID): Report = database.reportDao().getReport(id)
     suspend fun addReport(report: Report) = database.reportDao().addReport(report)
     suspend fun clearReports() = database.reportDao().clearReports()

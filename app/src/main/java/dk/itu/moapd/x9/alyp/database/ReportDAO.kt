@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dk.itu.moapd.x9.alyp.Report
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 /**
@@ -18,7 +19,7 @@ import java.util.UUID
 @Dao
 interface ReportDAO {
     @Query("SELECT * FROM report")
-    suspend fun getReports(): List<Report> // implement as suspending functions, runs within a coroutine
+    fun getReports(): Flow<List<Report>> // implement as suspending functions, runs within a coroutine
 
     @Query("SELECT * FROM report WHERE id=(:id)")
     suspend fun getReport(id: UUID): Report
