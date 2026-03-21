@@ -26,6 +26,10 @@ kotlin = "2.3.10"
 navigationFragmentKtx = "2.9.7"
 google-services = "4.4.4"
 junitJupiter = "6.0.3"
+roomCompiler = "2.8.4"
+roomCompilerVersion = "2.5.0"
+roomKtx = "2.8.4"
+roomRuntime = "2.8.4"
 runtime = "1.10.4"
 ui = "1.10.4"
 uiTooling = "1.10.4"
@@ -53,6 +57,10 @@ androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "runtime" }
 androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiTooling" }
