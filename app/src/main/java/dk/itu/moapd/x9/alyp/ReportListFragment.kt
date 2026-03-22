@@ -54,7 +54,9 @@ class ReportListFragment : Fragment() {
         }
         binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
         binding.reportListFragment.adapter = adapter
-        
+
+        // recieve all updates to the database, flow representds an async stream of data.
+        // flow emits a sequence of values which 'collect' observes
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 reportViewModel.reports.collect { report ->

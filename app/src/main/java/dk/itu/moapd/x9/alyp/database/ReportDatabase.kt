@@ -13,7 +13,7 @@ import dk.itu.moapd.x9.alyp.Report
  *
  * When the DB is created, Room will generate a concrete and accesible implementation of the DAO.
  */
-@Database(entities = [Report::class], version = 2)
+@Database(entities = [Report::class], version = 3)
 @TypeConverters(ReportTypeConverters::class)
 abstract class ReportDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDAO
