@@ -4,12 +4,16 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import java.text.DateFormat
 
 /**
  * ReportDialogFragment represents an alert dialog that pops up when a report is clicked.
  * Builder determines the content of the dialog.
  */
 class ReportDialogFragment : DialogFragment() {
+    fun toDate(date: Long) : String {
+        return DateFormat.getInstance().format(date)
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report
@@ -19,10 +23,11 @@ class ReportDialogFragment : DialogFragment() {
             builder.setTitle(report.title)
             builder.setMessage(
                 "Location: ${report.location}\n" +
-                "Date: ${report.date}\n" +
+                "Date: ${toDate(report.createdAt)}\n" +
                 "Type: ${report.type}\n" +
                 "Severity: ${report.severity}\n" +
-                report.description
+                "User: ${report.user}\n" +
+                "Description: ${report.description}"
             ).setPositiveButton("OK", null)
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")

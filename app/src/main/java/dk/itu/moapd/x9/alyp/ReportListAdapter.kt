@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.moapd.x9.alyp.databinding.ListItemReportBinding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
 
 /**
  * ReportHolder represents one visible row, and listens for click event on the report
@@ -12,11 +15,14 @@ class ReportHolder(
     private val binding: ListItemReportBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(report: Report, onItemClick: (Report) -> Unit) {
         binding.reportTitle.text = report.title
-        binding.reportDate.text = report.date.toString()
+        binding.reportDate.text = toDate(report.createdAt)
 
         binding.root.setOnClickListener {
             onItemClick(report)
         }
+    }
+    fun toDate(date: Long) : String {
+        return DateFormat.getInstance().format(date)
     }
 }
 

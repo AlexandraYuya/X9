@@ -16,9 +16,6 @@ class ReportViewModel : ViewModel() {
     private val reportRepository = ReportRepository.get()
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports
-//    val reports: MutableLiveData<List<Report>> by lazy {
-//        MutableLiveData<List<Report>>()
-//    }
 
     init {
         loadReports()
@@ -33,14 +30,13 @@ class ReportViewModel : ViewModel() {
     fun addReport(report: Report) {
         viewModelScope.launch {
             reportRepository.addReport(report)
-//            _reports.value = reportRepository.getReports()
         }
     }
 
+    // clears all reports from current logged in user
     fun clearReports() {
         viewModelScope.launch {
             reportRepository.clearReports()
-//            _reports.value = emptyList()
         }
     }
 }

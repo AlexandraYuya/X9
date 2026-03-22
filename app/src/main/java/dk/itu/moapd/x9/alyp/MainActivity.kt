@@ -30,8 +30,6 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
-    val reportViewModel: ReportViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                signOut(context = this)
+                signOut(this)
                 invalidateOptionsMenu()
                 true
             }
@@ -102,8 +100,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun signOut(context: Context) {
         auth.signOut()
-        reportViewModel.clearReports()
         Toast.makeText(context, "logged out, reports cleared", Toast.LENGTH_LONG).show()
+        startLoginActivity()
     }
 
     override fun onResume() {

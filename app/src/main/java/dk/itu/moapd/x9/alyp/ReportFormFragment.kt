@@ -94,16 +94,17 @@ class ReportFormFragment : Fragment() {
 
         // parse date&time at submit time
         val dateTimeText = binding.reportDateTimeInput.text.toString().trim()
-        val reportDate = dateFormatter.parse(dateTimeText) ?: Date()
+        val reportDate = dateFormatter.parse(dateTimeText)?.time ?: System.currentTimeMillis()
 
         val report = Report(
-            id = UUID.randomUUID(),
+            uid = UUID.randomUUID().toString(),
             title = binding.reportTitleInput.text.toString().trim(),
             location = binding.reportLocationInput.text.toString().trim(),
-            date = reportDate,
+            createdAt = reportDate,
             type = binding.reportTypeInput.text.toString().trim(),
             description = binding.reportDescriptionInput.text.toString().trim(),
-            severity = severity
+            severity = severity,
+            user = auth.currentUser?.email.toString()
         )
 
         reportViewModel.addReport(report)

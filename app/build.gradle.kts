@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.firebase.ui.auth.v900)
     implementation(libs.facebook.android.sdk)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     implementation(libs.androidx.foundation)
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.ui)

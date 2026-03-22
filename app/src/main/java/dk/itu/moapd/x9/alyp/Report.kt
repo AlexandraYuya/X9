@@ -1,9 +1,6 @@
 package dk.itu.moapd.x9.alyp
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.Date
-import java.util.UUID
+import com.firebase.ui.auth.data.model.User
 import java.io.Serializable
 
 /**
@@ -11,13 +8,13 @@ import java.io.Serializable
  * Each row represents an individual crime.
  * An app can have several DBs, hence an entity isn't automatically used by Room to create a table unless it's explicitly associated to a DB.
  */
-@Entity
-data class Report (
-    @PrimaryKey val id: UUID,
-    val title: String,
-    val location: String,
-    val date: Date,
-    val type: String,
-    val description: String,
-    val severity: String,
+data class Report(
+    val uid: String= "",
+    val title: String = "",
+    val location: String = "",
+    val createdAt: Long = 0L,
+    val type: String = "",
+    val description: String = "",
+    val severity: String = "",
+    val user: String = ""
 ) : Serializable
