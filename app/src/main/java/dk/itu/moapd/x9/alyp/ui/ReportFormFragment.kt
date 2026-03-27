@@ -119,45 +119,42 @@ class ReportFormFragment : Fragment() {
     }
 
     private fun validateInput(): Boolean {
-        val reportTitle = binding.reportTitleInput.text?.toString()?.trim().orEmpty()
-        val reportLocation = binding.reportLocationInput.text?.toString()?.trim().orEmpty()
-        val reportDate = binding.reportDateTimeInput.text?.toString()?.trim().orEmpty()
-        val reportType = binding.reportTypeInput.text?.toString()?.trim().orEmpty()
-        val reportDescription = binding.reportDescriptionInput.text?.toString()?.trim().orEmpty()
+        with(binding) {
+            reportTitleLayout.error = null
+            reportLocationLayout.error = null
+            reportDateLayout.error = null
+            reportTypeLayout.error = null
+            reportDescriptionLayout.error = null
 
-        binding.reportTitleLayout.error = null
-        binding.reportLocationLayout.error = null
-        binding.reportDateLayout.error = null
-        binding.reportTypeLayout.error = null
-        binding.reportDescriptionLayout.error = null
+            var ok = true
+            val reportDate = reportDateTimeInput.text?.toString()?.trim().orEmpty()
 
-        var ok = true
+            if (reportTitleInput.text?.toString()?.trim().orEmpty().isBlank()) {
+                binding.reportTitleLayout.error = getString(R.string.error_required)
+                ok = false
+            }
+            if (reportLocationInput.text?.toString()?.trim().orEmpty().isBlank()) {
+                binding.reportLocationLayout.error = getString(R.string.error_required)
+                ok = false
+            }
+            if (reportDate.isBlank()) {
+                binding.reportDateLayout.error = getString(R.string.error_required)
+                ok = false
+            } else if(!reportDate.matches(Regex("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"))) {
+                binding.reportDateLayout.error = getString(R.string.error_date_format)
+                ok = false
+            }
+            if (reportTypeInput.text?.toString()?.trim().orEmpty().isBlank()) {
+                binding.reportTypeLayout.error = getString(R.string.error_required)
+                ok = false
+            }
+            if (reportDescriptionInput.text?.toString()?.trim().orEmpty().isBlank()) {
+                binding.reportDescriptionLayout.error = getString(R.string.error_required)
+                ok = false
+            }
 
-        if (reportTitle.isBlank()) {
-            binding.reportTitleLayout.error = getString(R.string.error_required)
-            ok = false
+            return ok
         }
-        if (reportLocation.isBlank()) {
-            binding.reportLocationLayout.error = getString(R.string.error_required)
-            ok = false
-        }
-        if (reportDate.isBlank()) {
-            binding.reportDateLayout.error = getString(R.string.error_required)
-            ok = false
-        } else if(!reportDate.matches(Regex("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"))) {
-            binding.reportDateLayout.error = getString(R.string.error_date_format)
-            ok = false
-        }
-        if (reportType.isBlank()) {
-            binding.reportTypeLayout.error = getString(R.string.error_required)
-            ok = false
-        }
-        if (reportDescription.isBlank()) {
-            binding.reportDescriptionLayout.error = getString(R.string.error_required)
-            ok = false
-        }
-
-        return ok
     }
 
     override fun onStart() {
