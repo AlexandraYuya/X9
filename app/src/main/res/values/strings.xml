@@ -3,6 +3,7 @@
     <string name="report_title_hint">Report title</string>
     <string name="report_location_hint">Report Location</string>
     <string name="report_date_hint">Report date</string>
+    <string name="report_date_default_input">Wed May 11 11:56 2022</string>
     <string name="report_type_hint">Report type</string>
     <string name="report_description_hint">Report description</string>
     <string name="severity_minor">Minor</string>
@@ -15,6 +16,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="report_title">Report Title</string>
     <string name="report_date">Report Date</string>
+    <string name="report_author">Report Author</string>
     <string name="nav_report_list">List</string>
     <string name="nav_report_form">Form</string>
     <string name="nav_report_map">map</string>

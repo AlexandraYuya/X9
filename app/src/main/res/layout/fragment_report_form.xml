@@ -15,9 +15,9 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_title_layout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/report_form_text_input_width"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/report_form_text_input_margin"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,16 +31,16 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/report_title_hint"
                 android:inputType="textCapSentences|textAutoCorrect"
-                android:paddingStart="45dp" />
+                android:paddingStart="@dimen/report_form_text_input_padding_start"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_location_layout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/report_form_text_input_width"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/report_form_text_input_margin_start"
+            android:layout_marginTop="@dimen/report_form_text_input_margin_top"
+            android:layout_marginEnd="@dimen/report_form_text_input_margin_end"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,16 +54,16 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/report_location_hint"
                 android:inputType="textCapSentences|textPostalAddress|textAutoCorrect"
-                android:paddingStart="45dp" />
+                android:paddingStart="@dimen/report_form_text_input_padding_start" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_date_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/report_form_text_input_margin_start"
+            android:layout_marginTop="@dimen/report_form_text_input_margin_top"
+            android:layout_marginEnd="@dimen/report_form_text_input_margin_end"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,8 +77,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/report_date_hint"
                 android:inputType="datetime"
-                android:paddingStart="45dp"
-                tools:text="Wed May 11 11:56 2022"
+                android:paddingStart="@dimen/report_form_text_input_padding_start"
+                tools:text="@string/report_date_default_input"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,9 +87,9 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/report_form_text_input_margin_start"
+            android:layout_marginTop="@dimen/report_form_text_input_margin_top"
+            android:layout_marginEnd="@dimen/report_form_text_input_margin_end"
             android:hint="@string/report_type_hint"
             app:boxBackgroundMode="filled"
             app:layout_constraintEnd_toEndOf="parent"
@@ -102,16 +102,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textAutoCorrect"
-                android:paddingStart="45dp" />
+                android:paddingStart="@dimen/report_form_text_input_padding_start" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_description_layout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/report_form_text_input_width"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/report_form_text_input_margin_start"
+            android:layout_marginTop="@dimen/report_form_text_input_margin_top"
+            android:layout_marginEnd="@dimen/report_form_text_input_margin_end"
             app:boxBackgroundMode="filled"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -122,17 +122,17 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/report_description_input"
                 android:layout_width="match_parent"
-                android:layout_height="98dp"
+                android:layout_height="@dimen/report_form_text_input_height"
                 android:hint="@string/report_description_hint"
                 android:inputType="textMultiLine|textAutoCorrect"
-                android:paddingStart="45dp" />
+                android:paddingStart="@dimen/report_form_text_input_padding_start" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/button_toggle_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/report_form_text_input_margin_top"
             android:gravity="center"
             android:orientation="horizontal"
             app:singleSelection="true"
@@ -173,12 +173,12 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/submit_btn"
-            android:layout_width="150dp"
+            android:layout_width="@dimen/report_form_button_width"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginTop="@dimen/report_form_button_margin_top"
+            android:layout_marginBottom="@dimen/report_form_button_margin_bottom"
             android:text="@string/submit_btn"
-            android:textSize="20sp"
+            android:textSize="@dimen/report_form_button_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_toggle_group" />

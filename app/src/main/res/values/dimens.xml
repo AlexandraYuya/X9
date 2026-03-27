@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="content_main_height">0dp</dimen>
+    <dimen name="content_main_width">0dp</dimen>
+
+    <dimen name="report_form_text_input_width">0dp</dimen>
+    <dimen name="report_form_text_input_height">98dp</dimen>
+    <dimen name="report_form_text_input_margin">16dp</dimen>
+    <dimen name="report_form_text_input_margin_start">16dp</dimen>
+    <dimen name="report_form_text_input_margin_end">16dp</dimen>
+    <dimen name="report_form_text_input_margin_top">10dp</dimen>
+    <dimen name="report_form_text_input_padding_start">45dp</dimen>
+
+    <dimen name="report_form_button_width">150dp</dimen>
+    <dimen name="report_form_button_margin_top">20dp</dimen>
+    <dimen name="report_form_button_margin_bottom">25dp</dimen>
+    <dimen name="report_form_button_text_size">20sp</dimen>
+
+    <dimen name="report_list_item_padding">8dp</dimen>
+    <dimen name="report_list_item_text">20sp</dimen>
+</resources>

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    android:padding="@dimen/report_list_item_padding"
     >
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/report_title"
-        android:textSize="20sp"
+        android:textSize="@dimen/report_list_item_text"
         app:drawableStartCompat="@drawable/assignment" />
 
     <TextView
@@ -20,4 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/report_date" />
+
+    <TextView
+        android:id="@+id/report_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_author" />
 </LinearLayout>
