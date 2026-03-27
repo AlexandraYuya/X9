@@ -13,6 +13,20 @@
         android:layout_height="wrap_content"
         tools:context=".ui.ReportFormFragment">
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/report_list_margin_top"
+            android:layout_marginEnd="@dimen/report_list_margin_bottom"
+            android:text="@string/report_form"
+            android:textSize="@dimen/report_list_text_size"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_title_layout"
             android:layout_width="@dimen/report_form_text_input_width"
@@ -22,7 +36,7 @@
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
             app:startIconDrawable="@drawable/car">
 
             <com.google.android.material.textfield.TextInputEditText

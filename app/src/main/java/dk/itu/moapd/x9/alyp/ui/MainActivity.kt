@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         menu?.findItem(R.id.action_logout)?.isVisible = auth.currentUser != null
         menu?.findItem(R.id.action_login)?.isVisible = auth.currentUser == null
+        menu?.findItem(R.id.action_profile)?.isVisible = auth.currentUser != null
         return super.onPrepareOptionsMenu(menu)
     }
 

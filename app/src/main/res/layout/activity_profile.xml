@@ -23,6 +23,20 @@
             />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/report_list_margin_top"
+        android:layout_marginEnd="@dimen/report_list_margin_bottom"
+        android:text="@string/user_reports"
+        android:textSize="@dimen/report_list_text_size"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/profile_fragment_container_view"
         android:name="androidx.navigation.fragment.NavHostFragment"
