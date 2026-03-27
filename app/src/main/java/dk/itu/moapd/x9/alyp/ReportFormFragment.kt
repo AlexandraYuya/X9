@@ -86,10 +86,10 @@ class ReportFormFragment : Fragment() {
         }
 
         val severity = when (checkedId) {
-            R.id.button_minor -> "Minor"
-            R.id.button_moderate -> "Moderate"
-            R.id.button_major -> "Major"
-            else -> "Unknown"
+            R.id.button_minor -> getString(R.string.severity_minor)
+            R.id.button_moderate -> getString(R.string.severity_moderate)
+            R.id.button_major -> getString(R.string.severity_major)
+            else -> getString(R.string.error_required)
         }
 
         // parse date&time at submit time
