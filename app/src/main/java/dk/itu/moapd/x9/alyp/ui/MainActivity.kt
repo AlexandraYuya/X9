@@ -116,7 +116,6 @@ class MainActivity : AppCompatActivity() {
     private fun signOut(context: Context) {
         auth.signOut()
         Toast.makeText(context, "logged out, reports cleared", Toast.LENGTH_LONG).show()
-        startLoginActivity()
     }
 
     override fun onResume() {
