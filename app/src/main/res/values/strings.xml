@@ -1,27 +1,44 @@
 <resources>
+    <!-- Titles -->
     <string name="app_name">X9</string>
+    <string name="welcome_txt">Welcome to X9 Let’s Begin!</string>
+    <!--  Report hints  -->
     <string name="report_title_hint">Report title</string>
     <string name="report_location_hint">Report Location</string>
     <string name="report_date_hint">Report date</string>
-    <string name="report_date_default_input">Wed May 11 11:56 2022</string>
     <string name="report_type_hint">Report type</string>
     <string name="report_description_hint">Report description</string>
+    <!--    -->
+    <string name="report_date_default_input">Wed May 11 11:56 2022</string>
+    <!--  Severities  -->
     <string name="severity_minor">Minor</string>
     <string name="severity_moderate">Moderate</string>
     <string name="severity_major">Major</string>
+    <!-- Buttons  -->
     <string name="submit_btn">Submit</string>
-    <string name="view_reports">View Reports</string>
-    <string name="welcome_txt">Welcome to X9 Let’s Begin!</string>
     <string name="create_report_btn">Create a new report</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--    -->
+    <string name="view_reports">View Reports</string>
     <string name="report_title">Report Title</string>
     <string name="report_date">Report Date</string>
     <string name="report_author">Report Author</string>
+    <!--  Navbar menu items  -->
     <string name="nav_report_list">List</string>
     <string name="nav_report_form">Form</string>
     <string name="nav_report_map">map</string>
+    <!-- Login/logout buttons   -->
     <string name="logout">Logout</string>
     <string name="login">Login</string>
+    <!-- Error messages  -->
+    <string name="error_required">Required</string>
+    <string name="error_date_format">Format: yyyy-MM-dd HH:mm</string>
+    <!--  Report Dialog labels  -->
+    <string name="dialog_location_format">Location: %1$s\n</string>
+    <string name="dialog_date_format">Date: %1$s\n</string>
+    <string name="dialog_type_format">Type: %1$s\n</string>
+    <string name="dialog_severity_format">Severity: %1$s\n</string>
+    <string name="dialog_user_format">User: %1$s\n</string>
+    <string name="dialog_description_format">Description: %1$s\n</string>
 
     <string-array name="report_types_array">
         <item>Accident</item>

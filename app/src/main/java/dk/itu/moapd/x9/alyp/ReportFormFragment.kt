@@ -131,25 +131,26 @@ class ReportFormFragment : Fragment() {
         var ok = true
 
         if (reportTitle.isBlank()) {
-            binding.reportTitleLayout.error = "Required"
+            binding.reportTitleLayout.error = getString(R.string.error_required)
             ok = false
         }
         if (reportLocation.isBlank()) {
-            binding.reportLocationLayout.error = "Required"
+            binding.reportLocationLayout.error = getString(R.string.error_required)
             ok = false
         }
         if (reportDate.isBlank()) {
-            binding.reportDateLayout.error = "Required"; ok = false
+            binding.reportDateLayout.error = getString(R.string.error_required)
+            ok = false
         } else if(!reportDate.matches(Regex("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"))) {
-            binding.reportDateLayout.error = "Format: yyyy-MM-dd HH:mm"
+            binding.reportDateLayout.error = getString(R.string.error_date_format)
             ok = false
         }
         if (reportType.isBlank()) {
-            binding.reportTypeLayout.error = "Required"
+            binding.reportTypeLayout.error = getString(R.string.error_required)
             ok = false
         }
         if (reportDescription.isBlank()) {
-            binding.reportDescriptionLayout.error = "Required"
+            binding.reportDescriptionLayout.error = getString(R.string.error_required)
             ok = false
         }
 

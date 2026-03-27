@@ -22,12 +22,12 @@ class ReportDialogFragment : DialogFragment() {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle(report.title)
             builder.setMessage(
-                "Location: ${report.location}\n" +
-                "Date: ${toDate(report.createdAt)}\n" +
-                "Type: ${report.type}\n" +
-                "Severity: ${report.severity}\n" +
-                "User: ${report.user}\n" +
-                "Description: ${report.description}"
+                        getString(R.string.dialog_location_format, report.location) +
+                        getString(R.string.dialog_date_format, toDate(report.createdAt)) +
+                        getString(R.string.dialog_type_format, report.type) +
+                        getString(R.string.dialog_severity_format, report.severity) +
+                        getString(R.string.dialog_user_format, report.user) +
+                        getString(R.string.dialog_description_format, report.description)
             ).setPositiveButton("OK", null)
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
