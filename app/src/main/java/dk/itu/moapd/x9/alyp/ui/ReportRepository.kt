@@ -24,11 +24,39 @@ private const val DATABASE_URL = "https://moapd-2026-bf43d-default-rtdb.europe-w
 class ReportRepository private constructor(){
     private val auth = FirebaseAuth.getInstance()
     private val database = Firebase.database(DATABASE_URL)
-    private fun reportsRef() = auth.currentUser?.uid?.let { uid ->
+    private fun userReportsRef() = auth.currentUser?.uid?.let { uid ->
         database.reference.child("reports").child(uid)
     }
-    fun getReports(): Flow<List<Report>> = callbackFlow {
-        val ref = reportsRef()
+    private fun publicReportsRef() = database.getReference("reports/")
+
+    fun getPublicReports(): Flow<List<Report>> = callbackFlow {
+        val ref = publicReportsRef()
+
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val reports = snapshot.children
+                    .flatMap { userSnapshot ->
+                        userSnapshot.children.mapNotNull { reportSnapshot ->
+                            reportSnapshot.getValue(Report::class.java)
+                        }
+                }.sortedBy { it.createdAt }
+                trySend(reports)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Database read cancelled", error.toException())
+                trySend(emptyList())
+                close()
+            }
+        }
+        ref.addValueEventListener(listener)
+
+        awaitClose {
+            ref.removeEventListener(listener)
+        }
+    }
+    fun getUserReports(): Flow<List<Report>> = callbackFlow {
+        val ref = userReportsRef()
 
         if(ref == null) {
             trySend(emptyList())
@@ -57,12 +85,12 @@ class ReportRepository private constructor(){
             query.removeEventListener(listener)
         }
     }
-    fun addReport(report: Report) {
-        val ref = reportsRef() ?: throw IllegalStateException("User must be logged in")
+    fun addUserReport(report: Report) {
+        val ref = userReportsRef() ?: throw IllegalStateException("User must be logged in")
         ref.child(report.uid).setValue(report)
     }
-    fun clearReports() {
-        val ref = reportsRef() ?: throw IllegalStateException("User must be logged in")
+    fun clearUserReports() {
+        val ref = userReportsRef() ?: throw IllegalStateException("User must be logged in")
         ref.removeValue()
     }
 

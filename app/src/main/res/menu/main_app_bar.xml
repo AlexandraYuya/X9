@@ -15,4 +15,11 @@
         android:tooltipText="@string/login"
         app:showAsAction="ifRoom"
         />
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/profile"
+        android:title="@string/profile"
+        android:tooltipText="@string/profile"
+        app:showAsAction="ifRoom"
+        />
 </menu>

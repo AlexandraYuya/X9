@@ -39,6 +39,8 @@
     <string name="dialog_severity_format">Severity: %1$s\n</string>
     <string name="dialog_user_format">User: %1$s\n</string>
     <string name="dialog_description_format">Description: %1$s\n</string>
+    <string name="profile">profile</string>
+    <string name="arrow_back">back</string>
 
     <string-array name="report_types_array">
         <item>Accident</item>

@@ -110,7 +110,7 @@ class ReportFormFragment : Fragment() {
             user = auth.currentUser?.email.toString()
         )
 
-        reportViewModel.addReport(report)
+        reportViewModel.addUserReport(report)
         Log.d(TAG, "Report stored, Success!")
 
         Toast.makeText(requireContext(), "Report stored successfully!", Toast.LENGTH_SHORT).show()

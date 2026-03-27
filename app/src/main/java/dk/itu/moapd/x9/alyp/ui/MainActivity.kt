@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.fragment_report_list, R.id.fragment_report_form
+                R.id.fragment_report_list,
+                R.id.fragment_report_form
             )
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
     // inflate the toolbar's menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.top_app_bar, menu)
+        menuInflater.inflate(R.menu.main_app_bar, menu)
         return true
     }
 
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    // configure paths/actions for appbar navigation
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
@@ -77,6 +79,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_login -> {
                 startLoginActivity()
+                true
+            }
+            R.id.action_profile -> {
+                startProfileActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -94,6 +100,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun startLoginActivity() {
         Intent(this, LoginActivity::class.java).apply {
+            startActivity(this)
+            finish()
+        }
+    }
+
+    private fun startProfileActivity() {
+        Intent(this, ProfileActivity::class.java).apply {
             startActivity(this)
             finish()
         }

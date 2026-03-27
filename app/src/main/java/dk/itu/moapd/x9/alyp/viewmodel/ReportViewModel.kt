@@ -10,30 +10,37 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "ReportViewModel"
 class ReportViewModel : ViewModel() {
-    private val reportRepository = ReportRepository.Companion.get()
+    private val reportRepository = ReportRepository.get()
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports
 
     init {
-        loadReports()
+        loadPublicReports()
     }
-    fun loadReports() {
+    fun loadPublicReports() {
         viewModelScope.launch {
-            reportRepository.getReports().collect {
+            reportRepository.getPublicReports().collect {
                 _reports.value = it
             }
         }
     }
-    fun addReport(report: Report) {
+    fun loadUserReports() {
         viewModelScope.launch {
-            reportRepository.addReport(report)
+            reportRepository.getUserReports().collect {
+                _reports.value = it
+            }
+        }
+    }
+    fun addUserReport(report: Report) {
+        viewModelScope.launch {
+            reportRepository.addUserReport(report)
         }
     }
 
     // clears all reports from current logged in user
-    fun clearReports() {
+    fun clearUserReports() {
         viewModelScope.launch {
-            reportRepository.clearReports()
+            reportRepository.clearUserReports()
         }
     }
 }
