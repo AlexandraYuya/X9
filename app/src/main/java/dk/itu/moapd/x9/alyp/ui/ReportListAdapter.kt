@@ -1,12 +1,11 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.moapd.x9.alyp.databinding.ListItemReportBinding
+import dk.itu.moapd.x9.alyp.model.Report
 import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
 
 /**
  * ReportHolder represents one visible row, and listens for click event on the report

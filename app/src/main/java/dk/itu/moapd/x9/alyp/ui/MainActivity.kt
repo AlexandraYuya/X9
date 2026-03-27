@@ -1,4 +1,4 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.ui
 
 import android.content.Context
 import android.content.Intent
@@ -7,15 +7,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.auth.FirebaseAuth
+import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
-import kotlin.getValue
 
 private const val TAG = "MainActivity"
 
@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.fragment_container_view
+            .findFragmentById(
+                R.id.fragment_container_view
             ) as NavHostFragment
         val navController = navHostFragment.navController
 
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    private fun setupNavigation(navController: androidx.navigation.NavController) {
+    private fun setupNavigation(navController: NavController) {
         binding.contentMain.bottomNavigation.setupWithNavController(navController)
     }
 

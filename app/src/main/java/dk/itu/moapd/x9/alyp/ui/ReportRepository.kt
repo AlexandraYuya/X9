@@ -1,4 +1,4 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.ui
 
 import android.util.Log
 import com.google.firebase.Firebase
@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import dk.itu.moapd.x9.alyp.model.Report
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

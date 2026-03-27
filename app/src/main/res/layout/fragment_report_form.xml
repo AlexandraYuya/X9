@@ -11,7 +11,7 @@
         android:id="@+id/report_form_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ReportFormFragment">
+        tools:context=".ui.ReportFormFragment">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_title_layout"

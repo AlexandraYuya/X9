@@ -1,9 +1,11 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.ui
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import dk.itu.moapd.x9.alyp.R
+import dk.itu.moapd.x9.alyp.model.Report
 import java.text.DateFormat
 
 /**

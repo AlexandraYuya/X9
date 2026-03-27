@@ -1,4 +1,4 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,10 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
+import dk.itu.moapd.x9.alyp.model.Report
+import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

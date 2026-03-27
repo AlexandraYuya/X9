@@ -1,6 +1,5 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.model
 
-import com.firebase.ui.auth.data.model.User
 import java.io.Serializable
 
 /**

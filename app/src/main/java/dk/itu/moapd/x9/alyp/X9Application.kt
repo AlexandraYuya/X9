@@ -1,8 +1,7 @@
 package dk.itu.moapd.x9.alyp
 
 import android.app.Application
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
+import dk.itu.moapd.x9.alyp.ui.ReportRepository
 
 private const val DATABASE_URL = "https://moapd-2026-bf43d-default-rtdb.europe-west1.firebasedatabase.app/reports{uid}"
 

@@ -1,4 +1,4 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
+import dk.itu.moapd.x9.alyp.R
 
 class LoginActivity : AppCompatActivity() {
     private val signInLauncher = registerForActivityResult(

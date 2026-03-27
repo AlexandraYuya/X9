@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragment_report_list"
-        android:name="dk.itu.moapd.x9.alyp.ReportListFragment"
+        android:name="dk.itu.moapd.x9.alyp.ui.ReportListFragment"
         tools:layout="@layout/fragment_report_list">
 <!--        <action-->
 <!--            android:id="@+id/action_reportListFragment_to_reportFormFragment"-->
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/fragment_report_form"
-        android:name="dk.itu.moapd.x9.alyp.ReportFormFragment"
+        android:name="dk.itu.moapd.x9.alyp.ui.ReportFormFragment"
         tools:layout="@layout/fragment_report_form">
         <action
             android:id="@+id/action_reportFormFragment_to_reportListFragment"

@@ -1,19 +1,16 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dk.itu.moapd.x9.alyp.ui.ReportRepository
+import dk.itu.moapd.x9.alyp.model.Report
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.Date
-import java.util.UUID
 
 private const val TAG = "ReportViewModel"
 class ReportViewModel : ViewModel() {
-    private val reportRepository = ReportRepository.get()
+    private val reportRepository = ReportRepository.Companion.get()
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports
 

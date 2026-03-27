@@ -3,6 +3,8 @@ package dk.itu.moapd.x9.alyp
 import org.junit.Assert.*
 import org.junit.Test
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import dk.itu.moapd.x9.alyp.model.Report
+import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import org.junit.Rule
 import java.util.Date
 import java.util.UUID
