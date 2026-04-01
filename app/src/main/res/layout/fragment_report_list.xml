@@ -4,29 +4,16 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-<!--    <TextView-->
-<!--        android:id="@+id/title"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/report_list_margin_top"-->
-<!--        android:layout_marginEnd="@dimen/report_list_margin_bottom"-->
-<!--        android:text="@string/public_reports"-->
-<!--        android:textSize="@dimen/report_list_text_size"-->
-<!--        android:textAlignment="center"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        />-->
+    <include
+        android:id="@+id/title"
+        layout="@layout/public_report_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/report_list_fragment"
         android:layout_width="match_parent"
         android:layout_height="@dimen/report_list_height"
         android:layout_marginTop="@dimen/report_list_margin_top"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

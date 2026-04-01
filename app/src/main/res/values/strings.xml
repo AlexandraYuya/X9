@@ -42,8 +42,9 @@
     <string name="profile">profile</string>
     <string name="arrow_back">back</string>
     <string name="public_reports">Public reports😑</string>
-    <string name="report_form">Report Form🦞</string>
-    <string name="user_reports">User\'s reports💃</string>
+    <string name="report_form_title">Report Form🦞</string>
+    <string name="user_reports_title">User\'s reports💃</string>
+    <string name="public_reports_title">Public Reports 🙆‍♀️</string>
 
     <string-array name="report_types_array">
         <item>Accident</item>
