@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.services)
     id("com.google.devtools.ksp")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -94,6 +95,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
     ksp(libs.androidx.room.compiler)
     debugImplementation(libs.androidx.fragment.testing.manifest)
     androidTestImplementation(libs.androidx.espresso.core.v361)
