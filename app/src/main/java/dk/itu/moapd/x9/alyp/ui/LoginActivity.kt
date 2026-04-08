@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
         val signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setTheme(R.style.AppTheme)
             .build()
         signInLauncher.launch(signInIntent)
     }
