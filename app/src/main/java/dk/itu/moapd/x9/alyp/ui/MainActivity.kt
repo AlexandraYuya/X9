@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DynamicColors.applyToActivityIfAvailable(this)
         Log.d(TAG, "OnCreate(Bundle?) called")
         auth = FirebaseAuth.getInstance()
 
