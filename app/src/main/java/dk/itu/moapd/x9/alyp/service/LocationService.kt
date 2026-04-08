@@ -6,6 +6,8 @@ import android.location.Location
 import android.os.Binder
 import android.os.IBinder
 import android.os.Looper
+import android.telecom.TelecomManager.EXTRA_LOCATION
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -35,19 +37,19 @@ class LocationService : Service() {
          * The interval for active location updates. Updates may be less frequent than this interval
          * if the app is not in the foreground.
          */
-        private const val LOCATION_UPDATE_INTERVAL_MS = 60L
+        private const val LOCATION_UPDATE_INTERVAL_MS = 1000L
 
         /**
          * The fastest rate for active location updates. Updates will never be more frequent
          * than this value.
          */
-        private const val MIN_UPDATE_INTERVAL_MS = 30L
+        private const val MIN_UPDATE_INTERVAL_MS = 500L
 
         /**
          * The maximum time when batched location updates are delivered. Updates may be
          * delivered sooner than this interval.
          */
-        private const val MAX_UPDATE_DELAY_MS = 2L
+        private const val MAX_UPDATE_DELAY_MS = 50L
     }
 
     inner class LocalBinder : Binder() {
@@ -71,10 +73,10 @@ class LocationService : Service() {
                 locationResult.lastLocation?.let {
                     _locationUpdates.tryEmit(it)
                 }
-//                val currentLocation = locationResult.lastLocation
-//                val intent = Intent()
-//                intent.putExtra(EXTRA_LOCATION, currentLocation)
-//                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                val currentLocation = locationResult.lastLocation
+                val intent = Intent()
+                intent.putExtra(EXTRA_LOCATION, currentLocation)
+                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
             }
         }
     }

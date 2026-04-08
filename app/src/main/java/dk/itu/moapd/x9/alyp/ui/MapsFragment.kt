@@ -1,8 +1,13 @@
 package dk.itu.moapd.x9.alyp.ui
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +17,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import dk.itu.moapd.x9.alyp.databinding.FragmentMapsBinding
+import dk.itu.moapd.x9.alyp.service.LocationService
+import kotlinx.coroutines.launch
 
 private const val TAG = "MapsFragment"
 class MapsFragment : Fragment() {
@@ -41,6 +51,44 @@ class MapsFragment : Fragment() {
 
     private var googleMap: GoogleMap? = null
 
+    /**
+     * Provides location updates for while-in-use feature.
+     */
+    private var locationService: LocationService? = null
+
+    /**
+     * A flag to indicate whether a bound to the service.
+     */
+    private var locationServiceBound: Boolean = false
+
+    /**
+     * When a start-tracking request happens but the service is not yet bound, this flag marks a
+     * pending request. Once the service bind completes we will subscribe to updates.
+     */
+//    private var pendingStartTracking: Boolean = false
+
+        private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            val binder = service as LocationService.LocalBinder
+            locationService = binder.service
+            locationServiceBound = true
+            locationService?.subscribeToLocationUpdates()
+            collectLocationUpdates()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            locationService = null
+            locationServiceBound = false
+        }
+    }
+
+    private fun collectLocationUpdates() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            locationService?.locationUpdates?.collect { location ->
+                Log.d(TAG, "lat: ${location.latitude}, lng: ${location.longitude}")
+            }
+        }
+    }
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -99,6 +147,17 @@ class MapsFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        val serviceIntent = Intent(requireContext(), LocationService::class.java)
+        requireActivity().bindService(
+            serviceIntent,
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager
@@ -124,5 +183,19 @@ class MapsFragment : Fragment() {
         } catch (e: SecurityException) {
             Log.e(TAG, "Cannot enable location: ${e.message}")
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (locationServiceBound) {
+            locationService?.unsubscribeToLocationUpdates()
+            requireActivity().unbindService(serviceConnection)
+            locationServiceBound = false
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
