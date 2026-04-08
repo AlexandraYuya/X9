@@ -99,7 +99,7 @@ class MapsFragment : Fragment() {
             view?.let {
                 Snackbar.make(
                     it,
-                    "permission denied message",
+                    "Location permission, not enabled. To be able to track current position. Please allow location permission.",
                     Snackbar.LENGTH_SHORT
                 ).show()
             }

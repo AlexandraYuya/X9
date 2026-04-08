@@ -40,20 +40,6 @@ private const val TAG = "MainActivity"
  *  and actions between destinations in nav_graph.xml and sets it up with the bottom navigation menu.
  */
 class MainActivity : AppCompatActivity() {
-
-//    private inner class LocationBroadcastReceiver : BroadcastReceiver() {
-//        override fun onReceive(context: Context, intent: Intent) {
-//            val location = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-//                intent.getParcelableExtra(LocationService.EXTRA_LOCATION,
-//                    Location::class.java)
-//            else
-//                @Suppress("DEPRECATION")
-//                intent.getParcelableExtra(LocationService.EXTRA_LOCATION)
-//            location?.let {
-//                onLocationCallback?.invoke(it)
-//            }
-//        }
-//    }
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
 
@@ -156,7 +142,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onHasPermission() {
-        Snackbar.make(binding.root, "You already have permission", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, "Location permission activated", Snackbar.LENGTH_SHORT).show()
     }
     private fun onRequestPermission() {
         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)

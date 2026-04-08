@@ -4,9 +4,6 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <include
-        android:id="@+id/title"
-        layout="@layout/public_report_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/report_list_fragment"
