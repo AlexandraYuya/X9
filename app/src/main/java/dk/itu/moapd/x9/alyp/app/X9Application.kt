@@ -1,13 +1,13 @@
-package dk.itu.moapd.x9.alyp
+package dk.itu.moapd.x9.alyp.app
 
 import android.app.Application
 import android.util.Log
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.material.color.DynamicColors
-import dk.itu.moapd.x9.alyp.ui.ReportRepository
-
-private const val DATABASE_URL = "https://moapd-2026-bf43d-default-rtdb.europe-west1.firebasedatabase.app/reports{uid}"
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
+import dk.itu.moapd.x9.alyp.core.DATABASE_URL
 private const val TAG = "X9Application"
 /**
  * Application.onCreate() called by system when application is first loaded into memory i.e. 'launches' and destroyed when X9 process is destroyed.
@@ -19,9 +19,9 @@ class X9Application : Application(), OnMapsSdkInitializedCallback {
     override fun onCreate() {
         super.onCreate()
         DynamicColors.applyToActivitiesIfAvailable(this)
-//        Firebase.database(DATABASE_URL).setPersistenceEnabled(true)
+        Firebase.database(DATABASE_URL).setPersistenceEnabled(true)
+        Firebase.database(DATABASE_URL).reference.keepSynced(true)
         MapsInitializer.initialize(this, MapsInitializer.Renderer.LATEST, this)
-        ReportRepository.initialize()
     }
 
     override fun onMapsSdkInitialized(renderer: MapsInitializer.Renderer) {

@@ -1,16 +1,11 @@
 package dk.itu.moapd.x9.alyp.ui
 
-import android.util.Log
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
+import dk.itu.moapd.x9.alyp.core.DATABASE_URL
 import dk.itu.moapd.x9.alyp.model.Report
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 /**
  * Repo encapsulates the logic for how to fetch and store a particular set of data,
@@ -19,94 +14,68 @@ import kotlinx.coroutines.flow.callbackFlow
  * ReportRepository is a singleton, meaning there will only ever be one instance of it in X9
  */
 private const val TAG = "ReportRepository"
-private const val DATABASE_URL = "https://moapd-2026-bf43d-default-rtdb.europe-west1.firebasedatabase.app/"
 
-class ReportRepository private constructor(){
-    private val auth = FirebaseAuth.getInstance()
-    private val database = Firebase.database(DATABASE_URL)
-    private fun userReportsRef() = auth.currentUser?.uid?.let { uid ->
-        database.reference.child("reports").child(uid)
-    }
-    private fun publicReportsRef() = database.getReference("reports/")
-
-    fun getPublicReports(): Flow<List<Report>> = callbackFlow {
-        val ref = publicReportsRef()
-
-        val listener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val reports = snapshot.children
-                    .flatMap { userSnapshot ->
-                        userSnapshot.children.mapNotNull { reportSnapshot ->
-                            reportSnapshot.getValue(Report::class.java)
-                        }
-                }.sortedBy { it.createdAt }
-                trySend(reports)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "Database read cancelled", error.toException())
-                trySend(emptyList())
-                close()
-            }
-        }
-        ref.addValueEventListener(listener)
-
-        awaitClose {
-            ref.removeEventListener(listener)
-        }
-    }
-    fun getUserReports(): Flow<List<Report>> = callbackFlow {
-        val ref = userReportsRef()
-
-        if(ref == null) {
-            trySend(emptyList())
-            close()
-            return@callbackFlow
-        }
-
-        val query = ref.orderByChild("createdAt")
-        val listener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val reports = snapshot.children.mapNotNull { child ->
-                    child.getValue(Report::class.java)
-                }.sortedBy { it.createdAt }
-                trySend(reports)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "Database read cancelled", error.toException())
-                trySend(emptyList())
-                close()
-            }
-        }
-        query.addValueEventListener(listener)
-
-        awaitClose {
-            query.removeEventListener(listener)
-        }
-    }
-    fun addUserReport(report: Report) {
-        val ref = userReportsRef() ?: throw IllegalStateException("User must be logged in")
-        ref.child(report.uid).setValue(report)
-    }
-    fun clearUserReports() {
-        val ref = userReportsRef() ?: throw IllegalStateException("User must be logged in")
-        ref.removeValue()
-    }
-
+class ReportRepository(
+    private val database: DatabaseReference = Firebase.database(DATABASE_URL).reference
+){
     companion object {
-        private var INSTANCE: ReportRepository? = null // marked private so no external component can create their own instance
+        /**
+         * The path to the "reports" node in the database.
+         */
+        private const val PATH_REPORTS = "/reports"
 
-        // initialize a new instance of the repo
-        fun initialize() {
-            if (INSTANCE == null) {
-                INSTANCE = ReportRepository()
-            }
-        }
-
-        // access the initialized repo
-        fun get(): ReportRepository {
-            return INSTANCE ?: throw IllegalStateException("ReportRepository must be initialized")
-        }
+        /**
+         * The child key for the "createdAt" field in the database.
+         */
+        private const val CHILD_CREATED_AT = "createdAt"
     }
+
+    suspend fun getUserReports(userId: String?): List<Report> {
+        userId ?: return emptyList()
+        return database
+            .child(PATH_REPORTS)
+            .child(userId)
+            .orderByChild(CHILD_CREATED_AT)
+            .get()
+            .await()
+            .children
+            .mapNotNull { snapshot ->
+                snapshot.getValue(Report::class.java)
+            }
+    }
+
+    suspend fun getPublicReports(): List<Report> {
+        return database
+            .child(PATH_REPORTS)
+            .orderByChild(CHILD_CREATED_AT)
+            .get()
+            .await()
+            .children
+            .flatMap { snapshot ->
+                snapshot.children.mapNotNull {
+                    it.getValue(Report::class.java)
+                }
+            }
+    }
+
+    fun addUserReport(userId: String?, report: Report) {
+        userId ?: return
+        val key = database
+            .child(PATH_REPORTS)
+            .child(userId)
+            .push()
+            .key ?: return
+        database
+            .child(PATH_REPORTS)
+            .child(userId)
+            .child(key)
+            .setValue(report)
+    }
+//    fun clearUserReports(userId: String, key: String) {
+//        database
+//            .child(PATH_REPORTS)
+//            .child(userId)
+//            .child(key)
+//            .removeValue()
+//    }
 }

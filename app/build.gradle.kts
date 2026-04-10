@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.dotenv.kotlin)
     ksp(libs.androidx.room.compiler)
     debugImplementation(libs.androidx.fragment.testing.manifest)
     androidTestImplementation(libs.androidx.espresso.core.v361)
