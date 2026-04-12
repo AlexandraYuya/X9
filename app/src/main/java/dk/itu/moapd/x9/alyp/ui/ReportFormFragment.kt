@@ -1,5 +1,7 @@
 package dk.itu.moapd.x9.alyp.ui
 
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,12 +11,16 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
 import dk.itu.moapd.x9.alyp.model.Report
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -71,14 +77,16 @@ class ReportFormFragment : Fragment() {
 
         binding.submitBtn.setOnClickListener { view: View ->
             if (auth.currentUser != null) {
-                submitReport()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    submitReport()
+                }
             }else {
                 Toast.makeText(context, "Log-in to submit a report", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun submitReport() {
+    private suspend fun submitReport() {
         if(!validateInput()) return
 
         val checkedId = binding.buttonToggleGroup.checkedButtonId
@@ -99,10 +107,22 @@ class ReportFormFragment : Fragment() {
         val dateTimeText = binding.reportDateTimeInput.text.toString().trim()
         val reportDate = dateFormatter.parse(dateTimeText)?.time ?: System.currentTimeMillis()
 
+        val coordinates = withContext(Dispatchers.IO) {
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            geocoder.getFromLocationName(binding.reportLocationInput.text.toString().trim(), 1)?.firstOrNull()
+        }
+
+        if (coordinates == null) {
+            Toast.makeText(requireContext(), "Could not find location, try a more specific address", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val report = Report(
             uid = UUID.randomUUID().toString(),
             title = binding.reportTitleInput.text.toString().trim(),
             location = binding.reportLocationInput.text.toString().trim(),
+            latitude = coordinates.latitude,
+            longitude = coordinates.longitude,
             createdAt = reportDate,
             type = binding.reportTypeInput.text.toString().trim(),
             description = binding.reportDescriptionInput.text.toString().trim(),

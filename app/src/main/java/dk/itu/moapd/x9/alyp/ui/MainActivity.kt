@@ -1,31 +1,18 @@
 package dk.itu.moapd.x9.alyp.ui
 
-import android.Manifest
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
-import android.content.pm.PackageManager
-import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Snackbar
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.color.DynamicColors
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import dk.itu.moapd.x9.alyp.service.LocationService
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
 
@@ -67,26 +54,6 @@ class MainActivity : AppCompatActivity() {
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         setupNavigation(navController)
-    }
-
-    private val permissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (!isGranted) {
-            Snackbar.make(binding.root, "Location permission denied", Snackbar.LENGTH_LONG).show()
-        }
-    }
-
-    private fun requestOrStartTracking(
-        context: Context,
-        onHasPermission: () -> Unit,
-        onRequestPermission: () -> Unit,
-    ) {
-        val hasPermission = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-        ) == PackageManager.PERMISSION_GRANTED
-        if (hasPermission) onHasPermission() else onRequestPermission()
     }
 
     // inflate the toolbar's menu
@@ -133,19 +100,6 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         Log.d(TAG, "onStart() called")
         invalidateOptionsMenu()
-
-        requestOrStartTracking(
-            this,
-            { onHasPermission() },
-            { onRequestPermission() }
-        )
-    }
-
-    private fun onHasPermission() {
-        Snackbar.make(binding.root, "Location permission activated", Snackbar.LENGTH_SHORT).show()
-    }
-    private fun onRequestPermission() {
-        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     private fun startLoginActivity() {

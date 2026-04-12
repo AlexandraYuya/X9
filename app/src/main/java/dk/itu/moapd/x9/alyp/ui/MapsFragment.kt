@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,30 +26,29 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapColorScheme
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import dk.itu.moapd.x9.alyp.databinding.FragmentMapsBinding
 import dk.itu.moapd.x9.alyp.service.LocationService
+import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 private const val TAG = "MapsFragment"
+
+
 class MapsFragment : Fragment() {
+
+    /**
+     * Fields + properties
+     */
     private var _binding: FragmentMapsBinding? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMapsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     private val binding
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
-
+    val reportViewModel: ReportViewModel by activityViewModels()
     private var googleMap: GoogleMap? = null
 
     /**
@@ -57,23 +57,47 @@ class MapsFragment : Fragment() {
     private var locationService: LocationService? = null
 
     /**
-     * A flag to indicate whether a bound to the service.
+     * A flag to indicate whether the fragment is bound to the service.
      */
     private var locationServiceBound: Boolean = false
 
     /**
-     * When a start-tracking request happens but the service is not yet bound, this flag marks a
-     * pending request. Once the service bind completes we will subscribe to updates.
+     * Permission launcher. Called when callback is initiated, and a location permission isn't found.
+     * checks if location permission has been granted, if so subscribe to location service.
      */
-//    private var pendingStartTracking: Boolean = false
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            enableMyLocation()
+            locationService?.subscribeToLocationUpdates()
+            collectLocationUpdates()
+        } else {
+            // Use view (nullable) to avoid crashes if view is destroyed
+            view?.let {
+                Snackbar.make(
+                    it,
+                    "Location permission, not enabled. To be able to track current position. Please allow location permission.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
-        private val serviceConnection = object : ServiceConnection {
+    /**
+     * Establish service connection
+     * Permission already granted, onStart() calls serviceConnection
+     */
+    private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             val binder = service as LocationService.LocalBinder
             locationService = binder.service
             locationServiceBound = true
-            locationService?.subscribeToLocationUpdates()
-            collectLocationUpdates()
+
+            if (checkPermission()) { // checks if user already gave permission, if not then skips location subscription
+                locationService?.subscribeToLocationUpdates()
+                collectLocationUpdates()
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -89,26 +113,14 @@ class MapsFragment : Fragment() {
             }
         }
     }
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            enableMyLocation()
-        } else {
-            // Use view (nullable) to avoid crashes if view is destroyed
-            view?.let {
-                Snackbar.make(
-                    it,
-                    "Location permission, not enabled. To be able to track current position. Please allow location permission.",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
 
+    /**
+     * Map callback, called when map is ready to be used
+     * A callback interface that handles events and user interaction for the GoogleMap object.
+     */
     private val callback = OnMapReadyCallback { googleMap ->
 
-        // Update the Google Maps object.
+        // Update the Google Maps object. The entry point for managing the underlying map features and data.
         this.googleMap = googleMap
 
         // We use the view's root to find out how big the system bars are.
@@ -127,18 +139,27 @@ class MapsFragment : Fragment() {
 
         // Add a marker in IT University of Copenhagen and move the camera.
         val itu = LatLng(55.6596, 12.5910)
-        googleMap.addMarker(
-            MarkerOptions().position(itu).title("IT University of Copenhagen")
-        )
+        googleMap.addMarker(MarkerOptions()
+            .position(itu)
+            .title("IT University of Copenhagen"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(itu))
+        googleMap.isTrafficEnabled = true;
 
         // Set the Google Maps style.
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-//        googleMap.setMapStyle(
-//            MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.maps_style_json)
-//        )
+        googleMap.mapColorScheme = MapColorScheme.FOLLOW_SYSTEM
 
-        // Enable the location layer. Request the permission if it is not granted.
+        viewLifecycleOwner.lifecycleScope.launch {
+            reportViewModel.reports.collect { reports ->
+                reports.forEach { report ->
+                    if (report.latitude != 0.0 && report.longitude != 0.0) {
+                        addReportMarker(report.latitude, report.longitude, report.title, googleMap)
+                    }
+                }
+            }
+        }
+
+        // Enable the location layer. Request the permission if it is not granted. Callback will catch if user hasn't granted permission yet and will call requestUserPermissions()
         if (checkPermission()) {
             @Suppress("MissingPermission")
             googleMap.isMyLocationEnabled = true
@@ -147,24 +168,60 @@ class MapsFragment : Fragment() {
         }
     }
 
+    /**
+     * Lifecycle methods
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMapsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment = childFragmentManager
+            .findFragmentById(binding.map.id) as SupportMapFragment? // SupportMapFragment: A fragment for managing the lifecycle of a GoogleMap object.
+        mapFragment?.getMapAsync(callback)
+    }
+
     override fun onStart() {
         super.onStart()
 
         val serviceIntent = Intent(requireContext(), LocationService::class.java)
-        requireActivity().bindService(
+        requireActivity().bindService( // create connection to LocationService
             serviceIntent,
             serviceConnection,
             Context.BIND_AUTO_CREATE
         )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager
-            .findFragmentById(binding.map.id) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+    override fun onStop() {
+        super.onStop()
+        if (locationServiceBound) {
+            locationService?.unsubscribeToLocationUpdates()
+            requireActivity().unbindService(serviceConnection)
+            locationServiceBound = false
+        }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    /**
+     * Private helper methods
+     */
+
+    private fun addReportMarker(lat: Double, lng: Double, title: String, googleMap: GoogleMap) {
+        googleMap.addMarker(MarkerOptions()
+            .position(LatLng(lat, lng))
+            .title(title)
+        )
+    }
     private fun checkPermission() =
         ActivityCompat.checkSelfPermission(
             requireContext(),
@@ -183,19 +240,5 @@ class MapsFragment : Fragment() {
         } catch (e: SecurityException) {
             Log.e(TAG, "Cannot enable location: ${e.message}")
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (locationServiceBound) {
-            locationService?.unsubscribeToLocationUpdates()
-            requireActivity().unbindService(serviceConnection)
-            locationServiceBound = false
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

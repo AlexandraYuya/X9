@@ -11,9 +11,11 @@ data class Report(
     val uid: String= "",
     val title: String = "",
     val location: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
     val createdAt: Long = 0L,
     val type: String = "",
     val description: String = "",
     val severity: String = "",
-    val user: String = ""
+    val user: String = "",
 ) : Serializable
