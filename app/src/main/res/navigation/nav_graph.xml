@@ -23,4 +23,12 @@
             android:id="@+id/action_reportFormFragment_to_reportListFragment"
             app:destination="@+id/fragment_report_list" />
     </fragment>
+    <fragment
+        android:id="@+id/fragment_report_map"
+        android:name="dk.itu.moapd.x9.alyp.ui.MapsFragment"
+        tools:layout="@layout/fragment_maps">
+<!--        <action-->
+<!--            android:id="@+id/action_reportFormFragment_to_reportListFragment"-->
+<!--            app:destination="@+id/fragment_report_list" />-->
+    </fragment>
 </navigation>

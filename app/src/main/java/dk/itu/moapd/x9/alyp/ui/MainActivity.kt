@@ -12,7 +12,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.color.DynamicColors
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
@@ -33,7 +32,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DynamicColors.applyToActivityIfAvailable(this)
         Log.d(TAG, "OnCreate(Bundle?) called")
         auth = FirebaseAuth.getInstance()
 
@@ -50,7 +48,8 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.fragment_report_list,
-                R.id.fragment_report_form
+                R.id.fragment_report_form,
+                R.id.fragment_report_map
             )
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
@@ -78,17 +77,21 @@ class MainActivity : AppCompatActivity() {
                 invalidateOptionsMenu()
                 true
             }
+
             R.id.action_login -> {
                 startLoginActivity()
                 true
             }
+
             R.id.action_profile -> {
                 startProfileActivity()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     private fun setupNavigation(navController: NavController) {
         binding.contentMain.bottomNavigation.setupWithNavController(navController)
     }
@@ -122,10 +125,12 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(TAG, "onResume() called")
     }
+
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause() called")
     }
+
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop() called")

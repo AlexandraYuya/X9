@@ -15,6 +15,7 @@ class ReportHolder(
     fun bind(report: Report, onItemClick: (Report) -> Unit) {
         binding.reportTitle.text = report.title
         binding.reportDate.text = toDate(report.createdAt)
+        binding.reportAuthor.text = report.user
 
         binding.root.setOnClickListener {
             onItemClick(report)
