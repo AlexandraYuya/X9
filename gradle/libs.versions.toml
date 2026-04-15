@@ -40,6 +40,7 @@ espressoCoreVersion = "3.6.1"
 activityVersion = "1.13.0"
 play-services-maps = "20.0.0"
 dotenvKotlin = "6.5.1"
+camerax_version = "1.2.2"
 
 [libraries]
 dotenv-kotlin = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenvKotlin" }
@@ -88,6 +89,13 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "play-services-maps" }
+androidx-camera-core = { module = "androidx.camera:camera-core", name = "camera-core", version.ref = "camerax_version" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", name = "camera-camera2", version.ref = "camerax_version" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", name = "camera-lifecycle", version.ref = "camerax_version" }
+androidx-camera-video = { module = "androidx.camera:camera-video", name = "camera-video", version.ref = "camerax_version" }
+androidx-camera-view = { module = "androidx.camera:camera-view", name = "camera-view", version.ref = "camerax_version" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", name = "camera-extensions", version.ref = "camerax_version" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,6 +22,7 @@ import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -73,6 +76,12 @@ class ReportFormFragment : Fragment() {
 
         // format Date
         binding.reportDateTimeInput.setText(dateFormatter.format(Date()))
+
+        // camera click event listener to launch camera app
+        binding.reportCamera.setOnClickListener { view: View ->
+            // launch camera fragment if has permission
+            findNavController().navigate(R.id.action_reportFormFragment_to_reportCameraFragment)
+        }
 
         binding.submitBtn.setOnClickListener { view: View ->
             if (auth.currentUser != null) {

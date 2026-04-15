@@ -22,13 +22,20 @@
         <action
             android:id="@+id/action_reportFormFragment_to_reportListFragment"
             app:destination="@+id/fragment_report_list" />
+        <action
+            android:id="@+id/action_reportFormFragment_to_reportCameraFragment"
+            app:destination="@id/fragment_report_camera"
+            >
+        </action>
     </fragment>
     <fragment
         android:id="@+id/fragment_report_map"
         android:name="dk.itu.moapd.x9.alyp.ui.MapsFragment"
         tools:layout="@layout/fragment_maps">
-<!--        <action-->
-<!--            android:id="@+id/action_reportFormFragment_to_reportListFragment"-->
-<!--            app:destination="@+id/fragment_report_list" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_report_camera"
+        android:name="dk.itu.moapd.x9.alyp.ui.CameraFragment"
+        tools:layout="@layout/fragment_camera">
     </fragment>
 </navigation>

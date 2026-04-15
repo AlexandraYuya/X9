@@ -39,7 +39,7 @@
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/crime_layout"
+                android:id="@+id/camera_layout"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:orientation="vertical"
@@ -49,7 +49,7 @@
                 >
 
                 <ImageView
-                    android:id="@+id/crime_photo"
+                    android:id="@+id/report_photo"
                     android:layout_height="80dp"
                     android:layout_width="80dp"
                     android:scaleType="centerInside"
@@ -61,11 +61,11 @@
                     />
 
                 <ImageButton
-                    android:id="@+id/crime_camera"
+                    android:id="@+id/report_camera"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/camera"
-                    app:layout_constraintTop_toBottomOf="@id/crime_photo"
+                    app:layout_constraintTop_toBottomOf="@id/report_photo"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     />
@@ -77,10 +77,10 @@
                 android:layout_height="wrap_content"
                 app:boxBackgroundMode="filled"
                 app:endIconMode="clear_text"
-                app:layout_constraintTop_toTopOf="@id/crime_layout"
-                app:layout_constraintBottom_toBottomOf="@id/crime_layout"
+                app:layout_constraintTop_toTopOf="@id/camera_layout"
+                app:layout_constraintBottom_toBottomOf="@id/camera_layout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/crime_layout"
+                app:layout_constraintStart_toEndOf="@id/camera_layout"
                 app:startIconDrawable="@drawable/car"
                 android:layout_marginStart="@dimen/report_form_text_input_margin_start"
                 >

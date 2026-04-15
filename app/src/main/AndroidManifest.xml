@@ -4,6 +4,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Permission to stream network-based content -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Permission to keep the CPU running all the time -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!--Permission to Use a Device Camera-->
+    <uses-feature android:name="android.hardware.camera.any" /> <!--Permission to the front camera device-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!--Permiission to write to external storage, used for mediaPlayer???-->
     <application
         android:name=".app.X9Application"
         android:allowBackup="true"
