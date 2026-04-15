@@ -1,6 +1,5 @@
 package dk.itu.moapd.x9.alyp.ui
 
-import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
