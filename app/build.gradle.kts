@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android.v160)
     implementation(libs.firebaseui.firebase.ui.auth.v900)
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.storage)
     implementation(libs.firebase.ui.auth.v900)
     implementation(libs.facebook.android.sdk)
     implementation(libs.firebase.auth)

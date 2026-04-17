@@ -3,6 +3,7 @@ package dk.itu.moapd.x9.alyp.ui
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -23,8 +24,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
 import dk.itu.moapd.x9.alyp.databinding.FragmentCameraBinding
 import dk.itu.moapd.x9.alyp.viewmodel.CameraViewModel
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -54,7 +59,7 @@ class CameraFragment : Fragment() {
             }.toTypedArray()
     }
     private val viewModel: CameraViewModel by activityViewModels()
-
+    private val storage = Firebase.storage("gs://moapd-2026-bf43d.firebasestorage.app")
     private var _binding: FragmentCameraBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
@@ -195,9 +200,31 @@ class CameraFragment : Fragment() {
             object : ImageCapture.OnImageSavedCallback {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults){
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+                    // Create a storage reference from our app
+                    val storageRef = storage.reference
+                    val file = output.savedUri
+                    // Create a child reference
+                    val imagesRef: StorageReference = storageRef.child("images/${file?.lastPathSegment}")
+                    val uploadTask = imagesRef.putFile(file!!)
+
+                    uploadTask.continueWithTask { task ->
+                        if(!task.isSuccessful) {
+                            task.exception?.let {
+                                throw it
+                            }
+                        }
+                        imagesRef.downloadUrl
+                    }.addOnCompleteListener { task ->
+                        if(task.isSuccessful) {
+                            val downloadUri = task.result
+
+                            Toast.makeText(requireContext(), "Photo capture succeeded: ${output.savedUri}", Toast.LENGTH_SHORT).show()
+                            Log.d(TAG, "Photo capture succeeded: ${output.savedUri}")
+                            Log.d(TAG, "Download URI: $downloadUri")
+                        }else {
+                            Toast.makeText(context, "failed to upload image to storage", Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
 
                 override fun onError(exc: ImageCaptureException) {
@@ -223,9 +250,6 @@ class CameraFragment : Fragment() {
                 .also { it.setSurfaceProvider(binding.viewFinder.surfaceProvider) }
 
             imageCapture = ImageCapture.Builder().build()
-
-            // Select back camera as a default
-//            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
                 // Unbind before rebinding
