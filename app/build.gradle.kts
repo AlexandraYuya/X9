@@ -100,6 +100,7 @@ dependencies {
     implementation(libs.androidx.camera.video)
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.extensions)
+    implementation(libs.coil)
     ksp(libs.androidx.room.compiler)
     debugImplementation(libs.androidx.fragment.testing.manifest)
     androidTestImplementation(libs.androidx.espresso.core.v361)

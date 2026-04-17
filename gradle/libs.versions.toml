@@ -1,6 +1,7 @@
 [versions]
 activityCompose = "1.12.4"
 agp = "9.0.0"
+coil = "2.7.0"
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
 coreTesting = "2.2.0"
@@ -44,6 +45,7 @@ dotenvKotlin = "6.5.1"
 camerax_version = "1.2.2"
 
 [libraries]
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 dotenv-kotlin = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenvKotlin" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-espresso-core-v361 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }

@@ -3,9 +3,13 @@ package dk.itu.moapd.x9.alyp.ui
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.DialogFragment
+import coil.load
+import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportDialogBinding
+import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
 import dk.itu.moapd.x9.alyp.model.Report
 import java.text.DateFormat
 
@@ -20,19 +24,27 @@ class ReportDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report
+        val view = FragmentReportDialogBinding.inflate(layoutInflater) // one off inflation of the view, don't need persistent binding since we don't need to manage fragment's lifecycle.
+
+        if (report.imageUrl.isNotEmpty()) {
+            view.dialogImage.visibility = View.VISIBLE // hidden by default only not hidden if an image exists, not all reports have images
+            view.dialogImage.load(report.imageUrl)
+        }
+
+        view.dialogDetails.text =
+            getString(R.string.dialog_location_format, report.location) +
+                    getString(R.string.dialog_date_format, toDate(report.createdAt)) +
+                    getString(R.string.dialog_type_format, report.type) +
+                    getString(R.string.dialog_severity_format, report.severity) +
+                    getString(R.string.dialog_user_format, report.user) +
+                    getString(R.string.dialog_description_format, report.description)
 
         return activity?.let {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(report.title)
-            builder.setMessage(
-                        getString(R.string.dialog_location_format, report.location) +
-                        getString(R.string.dialog_date_format, toDate(report.createdAt)) +
-                        getString(R.string.dialog_type_format, report.type) +
-                        getString(R.string.dialog_severity_format, report.severity) +
-                        getString(R.string.dialog_user_format, report.user) +
-                        getString(R.string.dialog_description_format, report.description)
-            ).setPositiveButton("OK", null)
-            builder.create()
+            AlertDialog.Builder(requireContext())
+            .setTitle(report.title)
+            .setView(view.root)
+            .setPositiveButton("OK", null)
+            .create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
     companion object {
