@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,11 +16,11 @@ import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
 import dk.itu.moapd.x9.alyp.model.Report
+import dk.itu.moapd.x9.alyp.viewmodel.CameraViewModel
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,6 +43,7 @@ class ReportFormFragment : Fragment() {
             "Cannot access binding because it is null. Is the view visible?"
         }
     val reportViewModel: ReportViewModel by activityViewModels()
+    val cameraViewModel: CameraViewModel by activityViewModels()
     val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,7 +134,8 @@ class ReportFormFragment : Fragment() {
             type = binding.reportTypeInput.text.toString().trim(),
             description = binding.reportDescriptionInput.text.toString().trim(),
             severity = severity,
-            user = auth.currentUser?.email.toString()
+            user = auth.currentUser?.email.toString(),
+            imageUrl = cameraViewModel.imageUri.value.toString()
         )
 
         reportViewModel.addUserReport(report)

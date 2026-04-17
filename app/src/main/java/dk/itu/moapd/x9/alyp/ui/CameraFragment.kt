@@ -1,6 +1,7 @@
 package dk.itu.moapd.x9.alyp.ui
 
 import android.Manifest
+import dk.itu.moapd.x9.alyp.R
 import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -21,14 +22,17 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import dk.itu.moapd.x9.alyp.databinding.FragmentCameraBinding
 import dk.itu.moapd.x9.alyp.viewmodel.CameraViewModel
+import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -58,7 +62,7 @@ class CameraFragment : Fragment() {
                 }
             }.toTypedArray()
     }
-    private val viewModel: CameraViewModel by activityViewModels()
+    private val cameraViewModel: CameraViewModel by activityViewModels()
     private val storage = Firebase.storage("gs://moapd-2026-bf43d.firebasestorage.app")
     private var _binding: FragmentCameraBinding? = null
     private val binding
@@ -78,6 +82,8 @@ class CameraFragment : Fragment() {
     private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     private lateinit var cameraExecutor: ExecutorService
+    // Small local cache for the observed imageUri so the click listener can reference it.
+    private var imageUriLocal: Uri? = null
 
     /**
      * Permission launcher. Called when callback is initiated, and a location permission isn't found.
@@ -123,6 +129,13 @@ class CameraFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
 
+        // Observe imageUri from the ViewModel so the fragment UI reflects the latest saved photo.
+        cameraViewModel.imageUri.observe(viewLifecycleOwner) { uri ->
+            // Update the local UI state if needed. Keep a small local cache so the click
+            // listener below can access it without directly reading LiveData each time.
+            imageUriLocal = uri
+        }
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -130,8 +143,8 @@ class CameraFragment : Fragment() {
             requestPermissions()
         }
 
-//        // The current selected camera.
-        viewModel.selector.observe(viewLifecycleOwner) {
+        // The current selected camera.
+        cameraViewModel.selector.observe(viewLifecycleOwner) {
             // Only update the local selector when ViewModel provides a non-null value.
             // This avoids resetting to DEFAULT_BACK_CAMERA on configuration change
             // when LiveData doesn't have a value yet.
@@ -146,7 +159,7 @@ class CameraFragment : Fragment() {
                 // disable button until the camera is set up
                 isEnabled = false
                 setOnClickListener {
-                    viewModel.onCameraSelectorChanged(
+                    cameraViewModel.onCameraSelectorChanged(
                         if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA)
                             CameraSelector.DEFAULT_BACK_CAMERA
                         else
@@ -156,6 +169,14 @@ class CameraFragment : Fragment() {
                     startCamera()
                 }
             }
+
+            // Set up the listener for the photo view button.
+//            buttonImageViewer.setOnClickListener {
+//                imageUriLocal?.let { uri ->
+//                    requireActivity().findNavController()
+//                        .navigate(R.id.a, bundleOf("ARG_IMAGE" to uri.toString()))
+//                }
+//            }
         }
     }
 
@@ -217,10 +238,9 @@ class CameraFragment : Fragment() {
                     }.addOnCompleteListener { task ->
                         if(task.isSuccessful) {
                             val downloadUri = task.result
-
+                            cameraViewModel.onImageUriChanged(downloadUri)
                             Toast.makeText(requireContext(), "Photo capture succeeded: ${output.savedUri}", Toast.LENGTH_SHORT).show()
                             Log.d(TAG, "Photo capture succeeded: ${output.savedUri}")
-                            Log.d(TAG, "Download URI: $downloadUri")
                         }else {
                             Toast.makeText(context, "failed to upload image to storage", Toast.LENGTH_LONG).show()
                         }

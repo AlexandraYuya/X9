@@ -1,5 +1,6 @@
 package dk.itu.moapd.x9.alyp.model
 
+import android.net.Uri
 import java.io.Serializable
 
 /**
@@ -18,4 +19,5 @@ data class Report(
     val description: String = "",
     val severity: String = "",
     val user: String = "",
+    val imageUrl: String = "",
 ) : Serializable
