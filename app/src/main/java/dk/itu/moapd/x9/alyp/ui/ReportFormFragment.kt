@@ -82,6 +82,13 @@ class ReportFormFragment : Fragment() {
             findNavController().navigate(R.id.action_reportFormFragment_to_reportCameraFragment)
         }
 
+        cameraViewModel.localImageUri.observe(viewLifecycleOwner) { uri ->
+            if (uri !== null) {
+                binding.reportPhoto.setImageURI(uri)
+            }
+        }
+
+
         binding.submitBtn.setOnClickListener { view: View ->
             if (auth.currentUser != null) {
                 viewLifecycleOwner.lifecycleScope.launch {

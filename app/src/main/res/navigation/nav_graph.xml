@@ -37,5 +37,11 @@
         android:id="@+id/fragment_report_camera"
         android:name="dk.itu.moapd.x9.alyp.ui.CameraFragment"
         tools:layout="@layout/fragment_camera">
+
+        <action
+            android:id="@+id/action_reportCameraFragment_to_reportFormFragment"
+            app:destination="@id/fragment_report_form"
+            >
+        </action>
     </fragment>
 </navigation>

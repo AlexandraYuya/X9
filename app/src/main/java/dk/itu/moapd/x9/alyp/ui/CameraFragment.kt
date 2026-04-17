@@ -26,6 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.storage.StorageReference
@@ -221,6 +222,7 @@ class CameraFragment : Fragment() {
             object : ImageCapture.OnImageSavedCallback {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults){
+                    cameraViewModel.onLocalImageUriChanged(output.savedUri)
                     // Create a storage reference from our app
                     val storageRef = storage.reference
                     val file = output.savedUri
@@ -241,6 +243,8 @@ class CameraFragment : Fragment() {
                             cameraViewModel.onImageUriChanged(downloadUri)
                             Toast.makeText(requireContext(), "Photo capture succeeded: ${output.savedUri}", Toast.LENGTH_SHORT).show()
                             Log.d(TAG, "Photo capture succeeded: ${output.savedUri}")
+
+                            findNavController().navigate(R.id.action_reportCameraFragment_to_reportFormFragment)
                         }else {
                             Toast.makeText(context, "failed to upload image to storage", Toast.LENGTH_LONG).show()
                         }
