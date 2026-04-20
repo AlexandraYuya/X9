@@ -20,4 +20,5 @@ data class Report(
     val severity: String = "",
     val user: String = "",
     val imageUrl: String = "",
+    val upvoteCount: Int = 0
 ) : Serializable

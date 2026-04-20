@@ -44,6 +44,7 @@ import java.util.concurrent.Executors
 /**
  * Inspired by "Getting Started with CameraX", from android studio offical documentation: https://developer.android.com/codelabs/camerax-getting-started#0
  * and inspired by Fabricio Narcizo's code examples from "10-4_CameraX-MDC": https://github.com/fabricionarcizo/moapd2026/tree/main/lecture10/10-4_CameraX-MDC
+ * https://firebase.google.com/docs/storage/android/upload-files#kotlin_3
  */
 class CameraFragment : Fragment() {
 

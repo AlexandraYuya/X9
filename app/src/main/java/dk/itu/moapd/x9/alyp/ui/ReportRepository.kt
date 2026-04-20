@@ -1,7 +1,11 @@
 package dk.itu.moapd.x9.alyp.ui
 
 import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.google.firebase.database.database
 import dk.itu.moapd.x9.alyp.core.DATABASE_URL
 import dk.itu.moapd.x9.alyp.model.Report
@@ -23,6 +27,7 @@ class ReportRepository(
          * The path to the "reports" node in the database.
          */
         private const val PATH_REPORTS = "/reports"
+        private const val PATH_UPVOTES = "/upvotes"
 
         /**
          * The child key for the "createdAt" field in the database.
@@ -56,19 +61,17 @@ class ReportRepository(
                     it.getValue(Report::class.java)
                 }
             }
+            .map { report ->
+                report.copy(upvoteCount = getUpvoteCount(report.uid))
+            }
     }
 
     fun addUserReport(userId: String?, report: Report) {
         userId ?: return
-        val key = database
-            .child(PATH_REPORTS)
-            .child(userId)
-            .push()
-            .key ?: return
         database
             .child(PATH_REPORTS)
             .child(userId)
-            .child(key)
+            .child(report.uid)
             .setValue(report)
     }
 //    fun clearUserReports(userId: String, key: String) {
@@ -78,4 +81,41 @@ class ReportRepository(
 //            .child(key)
 //            .removeValue()
 //    }
+
+    suspend fun getUpvoteCount(reportUid: String): Int {
+        return database
+            .child(PATH_UPVOTES)
+            .child(reportUid)
+            .child("count")
+            .get().await().getValue(Int::class.java) ?: 0
+    }
+
+    suspend fun hasUserVoted(reportUid: String, userId: String): Boolean {
+        return database
+            .child(PATH_UPVOTES)
+            .child(reportUid)
+            .child("voters")
+            .child(userId)
+            .get().await().exists()
+    }
+
+    fun upvoteReport(reportUid: String, userId: String, onComplete: (success: Boolean, newCount: Int) -> Unit) {
+        val countRef = database.child(PATH_UPVOTES).child(reportUid).child("count")
+        val voterRef = database.child(PATH_UPVOTES).child(reportUid).child("voters").child(userId)
+
+        countRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                currentData.value = (currentData.getValue(Int::class.java) ?: 0) + 1
+                return Transaction.success(currentData)
+            }
+            override fun onComplete(error: DatabaseError?, committed: Boolean, snapshot: DataSnapshot?) {
+                if (committed && error == null) {
+                    voterRef.setValue(true)
+                    onComplete(true, snapshot?.getValue(Int::class.java) ?: 0)
+                } else {
+                    onComplete(false, 0)
+                }
+            }
+        })
+    }
 }

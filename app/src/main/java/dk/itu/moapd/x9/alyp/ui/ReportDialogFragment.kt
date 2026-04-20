@@ -5,12 +5,16 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportDialogBinding
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
 import dk.itu.moapd.x9.alyp.model.Report
+import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 
 /**
@@ -18,6 +22,8 @@ import java.text.DateFormat
  * Builder determines the content of the dialog.
  */
 class ReportDialogFragment : DialogFragment() {
+
+    private val reportViewModel: ReportViewModel by activityViewModels()
     fun toDate(date: Long) : String {
         return DateFormat.getInstance().format(date)
     }
@@ -25,6 +31,24 @@ class ReportDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report
         val view = FragmentReportDialogBinding.inflate(layoutInflater) // one off inflation of the view, don't need persistent binding since we don't need to manage fragment's lifecycle.
+
+        // Load upvote count and check if user already voted
+        lifecycleScope.launch {
+            view.upvoteCount.text = "${report.upvoteCount} confirmations"
+            val alreadyVoted = reportViewModel.hasUserVoted(report.uid)
+            view.upvoteButton.isEnabled = !alreadyVoted
+            if (alreadyVoted) view.upvoteButton.text = "Already confirmed"
+        }
+
+        view.upvoteButton.setOnClickListener {
+            reportViewModel.upvoteReport(report.uid) { success, newCount ->
+                if (success) {
+                    view.upvoteCount.text = "$newCount confirmations"
+                    view.upvoteButton.isEnabled = false
+                    view.upvoteButton.text = "Already confirmed"
+                }
+            }
+        }
 
         if (report.imageUrl.isNotEmpty()) {
             view.dialogImage.visibility = View.VISIBLE // hidden by default only not hidden if an image exists, not all reports have images

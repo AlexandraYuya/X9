@@ -25,11 +25,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapColorScheme
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import dk.itu.moapd.x9.alyp.databinding.FragmentMapsBinding
+import dk.itu.moapd.x9.alyp.model.Report
 import dk.itu.moapd.x9.alyp.service.LocationService
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.launch
@@ -153,7 +155,7 @@ class MapsFragment : Fragment() {
             reportViewModel.reports.collect { reports ->
                 reports.forEach { report ->
                     if (report.latitude != 0.0 && report.longitude != 0.0) {
-                        addReportMarker(report.latitude, report.longitude, report.title, googleMap)
+                        addReportMarker(report, googleMap)
                     }
                 }
             }
@@ -216,10 +218,16 @@ class MapsFragment : Fragment() {
      * Private helper methods
      */
 
-    private fun addReportMarker(lat: Double, lng: Double, title: String, googleMap: GoogleMap) {
+    private fun addReportMarker(report: Report, googleMap: GoogleMap) {
+        val hue = when  {
+            report.upvoteCount >= 10 -> BitmapDescriptorFactory.HUE_RED
+            report.upvoteCount >= 3  -> BitmapDescriptorFactory.HUE_ORANGE
+            else                     -> BitmapDescriptorFactory.HUE_AZURE
+        }
         googleMap.addMarker(MarkerOptions()
-            .position(LatLng(lat, lng))
-            .title(title)
+            .position(LatLng(report.latitude, report.longitude))
+            .title(report.title)
+            .icon(BitmapDescriptorFactory.defaultMarker(hue))
         )
     }
     private fun checkPermission() =

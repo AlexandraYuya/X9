@@ -44,4 +44,14 @@ class ReportViewModel : ViewModel() {
 //            reportRepository.clearUserReports(userId)
 //        }
 //    }
+
+    fun upvoteReport(reportUid: String, onResult: (success: Boolean, newCount: Int) -> Unit) {
+        val uid = userId ?: return
+        reportRepository.upvoteReport(reportUid, uid, onResult)
+    }
+
+    suspend fun hasUserVoted(reportUid: String): Boolean {
+        val uid = userId ?: return false
+        return reportRepository.hasUserVoted(reportUid, uid)
+    }
 }
