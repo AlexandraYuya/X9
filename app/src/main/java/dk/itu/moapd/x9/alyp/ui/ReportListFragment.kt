@@ -87,7 +87,7 @@ class ReportListFragment : Fragment() {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val report = adapter.getReportAt(viewHolder.adapterPosition)
-                    reportViewModel.clearUserReports(report.uid)
+                    reportViewModel.deleteUserReport(report.uid)
                     Toast.makeText(context, "Report successfully deleted", Toast.LENGTH_SHORT).show()
                 }
             }

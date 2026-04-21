@@ -3,7 +3,7 @@ package dk.itu.moapd.x9.alyp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import dk.itu.moapd.x9.alyp.ui.ReportRepository
+import dk.itu.moapd.x9.alyp.repository.ReportRepository
 import dk.itu.moapd.x9.alyp.model.Report
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,16 +41,19 @@ class ReportViewModel : ViewModel() {
     }
 
     // clears all reports from current logged in user
-    fun clearUserReports(reportUid: String) {
+    fun deleteUserReport(reportUid: String) {
         viewModelScope.launch {
-            reportRepository.clearUserReports(userId, reportUid)
+            reportRepository.deleteUserReport(userId, reportUid)
             loadUserReports()
         }
     }
 
-    fun upvoteReport(reportUid: String, onResult: (success: Boolean, newCount: Int) -> Unit) {
+    fun upvoteReport(reportUid: String, onResult: (Boolean, Int) -> Unit) {
         val uid = userId ?: return
-        reportRepository.upvoteReport(reportUid, uid, onResult)
+        viewModelScope.launch {
+            val (success, newCount) = reportRepository.upvoteReport(reportUid, uid)
+            onResult(success, newCount)
+        }
     }
 
     suspend fun hasUserVoted(reportUid: String): Boolean {
