@@ -48,6 +48,8 @@ class ReportListAdapter(private var reports: List<Report>, private val onItemCli
 
     override fun getItemCount() = reports.size
 
+    fun getReportAt(position: Int): Report = reports[position]
+
     fun update(newReport: List<Report>) {
         reports = newReport
         notifyDataSetChanged()

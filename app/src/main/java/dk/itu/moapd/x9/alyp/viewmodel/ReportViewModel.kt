@@ -21,6 +21,8 @@ class ReportViewModel : ViewModel() {
     }
     val userId = auth.currentUser?.uid
 
+    // coroutine scopes to run on separate thread, can run asynchronous code. Non blocking while querying database.
+    // work that needs to be executed only if the viewmodel is active. automatically canceled if the viewmodel is cleared.
     fun loadPublicReports() {
         viewModelScope.launch {
             _reports.value = reportRepository.getPublicReports()
@@ -39,11 +41,12 @@ class ReportViewModel : ViewModel() {
     }
 
     // clears all reports from current logged in user
-//    fun clearUserReports() {
-//        viewModelScope.launch {
-//            reportRepository.clearUserReports(userId)
-//        }
-//    }
+    fun clearUserReports(reportUid: String) {
+        viewModelScope.launch {
+            reportRepository.clearUserReports(userId, reportUid)
+            loadUserReports()
+        }
+    }
 
     fun upvoteReport(reportUid: String, onResult: (success: Boolean, newCount: Int) -> Unit) {
         val uid = userId ?: return

@@ -74,13 +74,16 @@ class ReportRepository(
             .child(report.uid)
             .setValue(report)
     }
-//    fun clearUserReports(userId: String, key: String) {
-//        database
-//            .child(PATH_REPORTS)
-//            .child(userId)
-//            .child(key)
-//            .removeValue()
-//    }
+
+    suspend fun clearUserReports(userId: String?, reportUid: String) {
+        userId ?: return
+        database
+            .child(PATH_REPORTS)
+            .child(userId)
+            .child(reportUid)
+            .removeValue()
+            .await()
+    }
 
     suspend fun getUpvoteCount(reportUid: String): Int {
         return database

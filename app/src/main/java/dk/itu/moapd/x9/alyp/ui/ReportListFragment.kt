@@ -6,17 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportListBinding
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.launch
 import kotlin.getValue
-
-private const val TAG = "ReportListFragment"
 
 /**
  * ReportListFragment is the default fragment shown.
@@ -24,6 +25,14 @@ private const val TAG = "ReportListFragment"
  * Calls the update method in the custom adapter with the new reports
  */
 class ReportListFragment : Fragment() {
+
+    companion object {
+        private const val TAG = "ReportListFragment"
+        private const val ARG_ALLOW_DELETE = "allow_delete"
+        fun newInstance(allowDelete: Boolean = false) = ReportListFragment().apply {
+            arguments = Bundle().apply { putBoolean(ARG_ALLOW_DELETE, allowDelete) }
+        }
+    }
     private var _binding: FragmentReportListBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
@@ -64,6 +73,25 @@ class ReportListFragment : Fragment() {
                     adapter.update(report)
                 }
             }
+        }
+
+        val allowDelete = arguments?.getBoolean(ARG_ALLOW_DELETE) == true
+        if (allowDelete) {
+            val swipeCallback = object :
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    rv: RecyclerView,
+                    vh: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ) = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val report = adapter.getReportAt(viewHolder.adapterPosition)
+                    reportViewModel.clearUserReports(report.uid)
+                    Toast.makeText(context, "Report successfully deleted", Toast.LENGTH_SHORT).show()
+                }
+            }
+            ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.reportListFragment)
         }
     }
 

@@ -34,8 +34,7 @@ class ProfileActivity : AppCompatActivity() {
 
         // only the first time the activity is created, add the fragment. Prevent constant reload when activity is created
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().add(binding.profileFragmentContainerView.id,
-                ReportListFragment()).commit()
+            supportFragmentManager.beginTransaction().add(binding.profileFragmentContainerView.id, ReportListFragment.newInstance(allowDelete = true)).commit()
         }
     }
 
