@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity() {
     private fun startProfileActivity() {
         Intent(this, ProfileActivity::class.java).apply {
             startActivity(this)
-            finish()
         }
     }
 

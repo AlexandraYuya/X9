@@ -11,11 +11,21 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 
+/**
+ * Entry point of the app responsible for authenticating the user via Firebase UI.
+ *
+ * Launches the Firebase UI sign-in screen immediately on creation. Email, phone, and Google sign-in options.
+ * On successful authentication the user is navigated to MainActivity. On failure, the activity relaunches.
+ */
 class LoginActivity : AppCompatActivity() {
-
     companion object {
         private const val TAG ="LoginActivity"
     }
+
+    /**
+     * Launcher for the Firebase UI sign-in flow.
+     * Delivers the authentication result to onSignInResult.
+     */
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract(),
     ) { result ->
@@ -25,10 +35,13 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "OnCreate(Bundle?) called")
-        setContentView(R.layout.activity_login)
         createSignInIntent()
     }
 
+    /**
+     * Builds and launches the Firebase UI sign-in intent with email,
+     * phone, and Google as available authentication providers.
+     */
     private fun createSignInIntent() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
@@ -45,14 +58,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
-            // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
-            Toast.makeText(this, "$user successfully logged in", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "${user?.email} successfully logged in", Toast.LENGTH_SHORT).show()
             startMainActivity()
         } else {
-            Toast.makeText(this, "Log-in failed!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Sign-in failed: ${result.idpResponse?.error?.errorCode}", Toast.LENGTH_SHORT).show()
+            createSignInIntent()
         }
     }
 
