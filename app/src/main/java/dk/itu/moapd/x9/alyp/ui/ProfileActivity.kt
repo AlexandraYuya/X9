@@ -12,8 +12,10 @@ import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityProfileBinding
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 
-private const val TAG = "ProfileActivity"
 class ProfileActivity : AppCompatActivity() {
+    companion object {
+        private const val TAG = "ProfileActivity"
+    }
 
     private lateinit var binding : ActivityProfileBinding
     private lateinit var auth: FirebaseAuth

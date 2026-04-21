@@ -11,8 +11,11 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 
-private const val TAG ="LoginActivity"
 class LoginActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG ="LoginActivity"
+    }
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract(),
     ) { result ->

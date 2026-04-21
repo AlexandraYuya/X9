@@ -19,13 +19,13 @@ class CameraViewModel : ViewModel() {
         get() = _selector
 
     /**
-     * The last captured image Uri.
+     * The last captured image Uri
      */
     private var _imageUri = MutableLiveData<Uri?>()
     private val _localImageUri = MutableLiveData<Uri?>()
 
     /**
-     * A `LiveData` which publicly exposes any update in the last captured image Uri.
+     * publicly exposes any update in the last captured image Uri
      */
     val imageUri: LiveData<Uri?> get() = _imageUri
 
@@ -33,18 +33,18 @@ class CameraViewModel : ViewModel() {
 
     /**
      * This method will be executed when the user interacts with the camera selector component. It
-     * sets the selector into the LiveData instance.
+     * sets the selector into the LiveData instance
      *
-     * @param selector A set of requirements and priorities used to select a camera.
+     * @param selector A set of requirements and priorities used to select a camera
      */
     fun onCameraSelectorChanged(selector: CameraSelector) {
         this._selector.value = selector
     }
 
     /**
-     * Update the last captured image Uri.
+     * Update the last captured image Uri
      *
-     * @param uri The new image Uri.
+     * @param uri The new image Uri
      */
     fun onImageUriChanged(uri: Uri?) {
         _imageUri.value = uri

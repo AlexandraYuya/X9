@@ -39,13 +39,18 @@
     <string name="dialog_severity_format">Severity: %1$s\n</string>
     <string name="dialog_user_format">User: %1$s\n</string>
     <string name="dialog_description_format">Description: %1$s\n</string>
+    <string name="dialog_OK_btn">OK</string>
+    <!-- Profile Activity -->
     <string name="profile">profile</string>
     <string name="arrow_back">back</string>
-    <string name="public_reports">Public reports😑</string>
+    <!-- Titles -->
     <string name="report_form_title">Report Form🦞</string>
     <string name="user_reports_title">User\'s reports💃</string>
     <string name="public_reports_title">Public Reports 🙆‍♀️</string>
-
+    <!-- Upvote counter -->
+    <string name="upvote_text">"%1$d upvotes"</string>
+    <string name="already_voted">Already voted</string>
+    <!-- Report severity array -->
     <string-array name="report_types_array">
         <item>Accident</item>
         <item>Speed Check</item>

@@ -16,8 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
 
-private const val TAG = "MainActivity"
-
 /**
  * MainActivity The one and only activity in X9 app.
  *  Base activity where the inner content is dynamically changed out with fragment navigation.
@@ -27,6 +25,9 @@ private const val TAG = "MainActivity"
  *  and actions between destinations in nav_graph.xml and sets it up with the bottom navigation menu.
  */
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private const val TAG = "MainActivity"
+    }
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
 

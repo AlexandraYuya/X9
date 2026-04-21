@@ -34,18 +34,18 @@ class ReportDialogFragment : DialogFragment() {
 
         // Load upvote count and check if user already voted
         lifecycleScope.launch {
-            view.upvoteCount.text = "${report.upvoteCount} confirmations"
+            view.upvoteCount.text = getString(R.string.upvote_text, report.upvoteCount)
             val alreadyVoted = reportViewModel.hasUserVoted(report.uid)
             view.upvoteButton.isEnabled = !alreadyVoted
-            if (alreadyVoted) view.upvoteButton.text = "Already confirmed"
+            if (alreadyVoted) view.upvoteButton.text = getString(R.string.already_voted)
         }
 
         view.upvoteButton.setOnClickListener {
             reportViewModel.upvoteReport(report.uid) { success, newCount ->
                 if (success) {
-                    view.upvoteCount.text = "$newCount confirmations"
+                    view.upvoteCount.text = getString(R.string.upvote_text, newCount)
                     view.upvoteButton.isEnabled = false
-                    view.upvoteButton.text = "Already confirmed"
+                    view.upvoteButton.text = getString(R.string.already_voted)
                 }
             }
         }
@@ -55,13 +55,14 @@ class ReportDialogFragment : DialogFragment() {
             view.dialogImage.load(report.imageUrl)
         }
 
-        view.dialogDetails.text =
-            getString(R.string.dialog_location_format, report.location) +
-                    getString(R.string.dialog_date_format, toDate(report.createdAt)) +
-                    getString(R.string.dialog_type_format, report.type) +
-                    getString(R.string.dialog_severity_format, report.severity) +
-                    getString(R.string.dialog_user_format, report.user) +
-                    getString(R.string.dialog_description_format, report.description)
+        view.dialogDetails.text = buildString {
+            append(getString(R.string.dialog_location_format, report.location))
+            append(getString(R.string.dialog_date_format, toDate(report.createdAt)))
+            append(getString(R.string.dialog_type_format, report.type))
+            append(getString(R.string.dialog_severity_format, report.severity))
+            append(getString(R.string.dialog_user_format, report.user))
+            append(getString(R.string.dialog_description_format, report.description))
+        }
 
         return activity?.let {
             AlertDialog.Builder(requireContext())
