@@ -13,6 +13,7 @@
             android:id="@+id/dialog_image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:contentDescription="@string/report_image_description"
             android:scaleType="centerCrop"
             android:visibility="gone" />
 

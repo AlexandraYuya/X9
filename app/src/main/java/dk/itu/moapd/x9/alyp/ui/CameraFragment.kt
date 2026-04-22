@@ -48,6 +48,7 @@ import java.util.Locale
  * Automatic navigation back to report form on successful capture and upload
  *
  * Inspired by "Getting Started with CameraX", from android studio official documentation: https://developer.android.com/codelabs/camerax-getting-started#0
+ * Inspired by Firebase Storage "Cloud Storage for Firebase" https://firebase.google.com/docs/storage/android/start
  * Inspired by Fabricio Narcizo's code examples from "10-4_CameraX-MDC": https://github.com/fabricionarcizo/moapd2026/tree/main/lecture10/10-4_CameraX-MDC
  * Inspired by firebase storage documentation https://firebase.google.com/docs/storage/android/upload-files#kotlin_3
  */

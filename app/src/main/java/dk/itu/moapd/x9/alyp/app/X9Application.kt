@@ -2,7 +2,6 @@ package dk.itu.moapd.x9.alyp.app
 
 import android.app.Application
 import android.util.Log
-import com.google.android.gms.maps.MapsInitializer
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.Firebase
 import com.google.firebase.database.database

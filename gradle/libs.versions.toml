@@ -7,7 +7,6 @@ appcompat = "1.7.1"
 coreTesting = "2.2.0"
 facebookAndroidSdk = "18.1.3"
 firebaseBom = "34.10.0"
-firebaseBomVersion = "34.12.0"
 firebaseUiAuth = "9.0.0"
 firebaseUiAuthVersion = "9.1.1"
 foundation = "1.10.4"
@@ -15,7 +14,6 @@ fragment = "1.8.9"
 kotlinxCoroutinesAndroid = "1.10.2"
 kotlinxCoroutinesAndroidVersion = "1.6.0"
 kotlinxCoroutinesCore = "1.10.2"
-kotlinxCoroutinesCoreVersion = "1.6.0"
 lifecycle = "2.10.0"
 materialVersion = "1.10.4"
 playServicesLocation = "21.3.0"
@@ -74,7 +72,6 @@ androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref =
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookAndroidSdk" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-bom-v34120 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 firebase-database = { module = "com.google.firebase:firebase-database" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
 firebase-ui-auth-v900 = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebaseUiAuthVersion" }
@@ -82,7 +79,6 @@ firebaseui-firebase-ui-auth-v900 = { module = "com.firebaseui:firebase-ui-auth",
 jetbrains-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-android-v160 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroidVersion" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-kotlinx-coroutines-core-v160 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCoreVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }

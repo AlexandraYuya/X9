@@ -50,6 +50,8 @@
     <!-- Upvote counter -->
     <string name="upvote_text">"%1$d upvotes"</string>
     <string name="already_voted">Already voted</string>
+    <string name="report_image_description">Report Image</string>
+    <string name="report_image_button">Report Image button</string>
     <!-- Report severity array -->
     <string-array name="report_types_array">
         <item>Accident</item>
