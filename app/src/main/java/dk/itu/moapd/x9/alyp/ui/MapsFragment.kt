@@ -37,10 +37,10 @@ import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-private const val TAG = "MapsFragment"
-
-
 class MapsFragment : Fragment() {
+    companion object {
+        private const val TAG = "MapsFragment"
+    }
 
     /**
      * Fields + properties
@@ -50,7 +50,7 @@ class MapsFragment : Fragment() {
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
-    val reportViewModel: ReportViewModel by activityViewModels()
+    private val reportViewModel: ReportViewModel by activityViewModels()
     private var googleMap: GoogleMap? = null
 
     /**
@@ -73,7 +73,6 @@ class MapsFragment : Fragment() {
         if (isGranted) {
             enableMyLocation()
             locationService?.subscribeToLocationUpdates()
-            collectLocationUpdates()
         } else {
             // Use view (nullable) to avoid crashes if view is destroyed
             view?.let {
@@ -98,21 +97,12 @@ class MapsFragment : Fragment() {
 
             if (checkPermission()) { // checks if user already gave permission, if not then skips location subscription
                 locationService?.subscribeToLocationUpdates()
-                collectLocationUpdates()
             }
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
             locationService = null
             locationServiceBound = false
-        }
-    }
-
-    private fun collectLocationUpdates() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            locationService?.locationUpdates?.collect { location ->
-                Log.d(TAG, "lat: ${location.latitude}, lng: ${location.longitude}")
-            }
         }
     }
 
@@ -145,17 +135,20 @@ class MapsFragment : Fragment() {
             .position(itu)
             .title("IT University of Copenhagen"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(itu))
-        googleMap.isTrafficEnabled = true;
+        googleMap.isTrafficEnabled = true
 
         // Set the Google Maps style.
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
         googleMap.mapColorScheme = MapColorScheme.FOLLOW_SYSTEM
 
         viewLifecycleOwner.lifecycleScope.launch {
-            reportViewModel.reports.collect { reports ->
-                reports.forEach { report ->
-                    if (report.latitude != 0.0 && report.longitude != 0.0) {
-                        addReportMarker(report, googleMap)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                reportViewModel.reports.collect { reports ->
+                    googleMap.clear()
+                    reports.forEach { report ->
+                        if (report.latitude != 0.0 && report.longitude != 0.0) {
+                            addReportMarker(report, googleMap)
+                        }
                     }
                 }
             }
@@ -166,18 +159,14 @@ class MapsFragment : Fragment() {
             @Suppress("MissingPermission")
             googleMap.isMyLocationEnabled = true
         } else {
-            requestUserPermissions()
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
     /**
      * Lifecycle methods
      */
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -221,8 +210,8 @@ class MapsFragment : Fragment() {
     private fun addReportMarker(report: Report, googleMap: GoogleMap) {
         val hue = when  {
             report.upvoteCount >= 10 -> BitmapDescriptorFactory.HUE_RED
-            report.upvoteCount >= 3  -> BitmapDescriptorFactory.HUE_ORANGE
-            else                     -> BitmapDescriptorFactory.HUE_AZURE
+            report.upvoteCount >= 3 -> BitmapDescriptorFactory.HUE_ORANGE
+            else -> BitmapDescriptorFactory.HUE_AZURE
         }
         googleMap.addMarker(MarkerOptions()
             .position(LatLng(report.latitude, report.longitude))
@@ -235,10 +224,6 @@ class MapsFragment : Fragment() {
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
-
-    private fun requestUserPermissions() {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-    }
 
     private fun enableMyLocation() {
         try {

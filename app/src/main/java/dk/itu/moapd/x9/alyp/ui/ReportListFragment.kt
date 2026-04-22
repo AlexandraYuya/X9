@@ -95,16 +95,6 @@ class ReportListFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart() called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop() called")
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

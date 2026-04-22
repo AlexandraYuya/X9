@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +45,8 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(
                 R.id.fragment_container_view
             ) as NavHostFragment
-        val navController = navHostFragment.navController
+
+        navController = navHostFragment.navController
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -54,10 +56,15 @@ class MainActivity : AppCompatActivity() {
             )
         )
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-        setupNavigation(navController)
+        binding.contentMain.bottomNavigation.setupWithNavController(navController)
     }
 
-    // inflate the toolbar's menu
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+        invalidateOptionsMenu()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_app_bar, menu)
         return true
@@ -93,16 +100,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupNavigation(navController: NavController) {
-        binding.contentMain.bottomNavigation.setupWithNavController(navController)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart() called")
-        invalidateOptionsMenu()
-    }
-
     private fun startLoginActivity() {
         Intent(this, LoginActivity::class.java).apply {
             startActivity(this)
@@ -118,21 +115,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun signOut(context: Context) {
         auth.signOut()
-        Toast.makeText(context, "logged out, reports cleared", Toast.LENGTH_LONG).show()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume() called")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause() called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop() called")
+        Toast.makeText(context, "signed out, user reports are no longer visible", Toast.LENGTH_LONG).show()
     }
 }

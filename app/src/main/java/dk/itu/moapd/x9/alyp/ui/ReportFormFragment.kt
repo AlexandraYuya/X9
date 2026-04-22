@@ -27,8 +27,6 @@ import java.util.Locale
 import java.util.UUID
 import kotlin.getValue
 
-private const val TAG = "ReportFormFragment"
-
 /**
  * ReportFormFragment represents the second fragment after the list fragment.
  * Determines the input for the form fields.
@@ -36,6 +34,10 @@ private const val TAG = "ReportFormFragment"
  * Navigates back to ReportListFragment upon successful submitting.
  */
 class ReportFormFragment : Fragment() {
+    companion object {
+        private const val TAG = "ReportFormFragment"
+    }
+
     private var _binding: FragmentReportFormBinding? = null
     private lateinit var auth: FirebaseAuth
     private val binding
@@ -46,18 +48,13 @@ class ReportFormFragment : Fragment() {
     val cameraViewModel: CameraViewModel by activityViewModels()
     val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate() called")
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentReportFormBinding.inflate(inflater, container, false).also {
+            auth = FirebaseAuth.getInstance()
+        }
+        return binding.root
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentReportFormBinding.inflate(inflater, container, false).also {
-        _binding = it
-        auth = FirebaseAuth.getInstance()
-    }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,6 +95,11 @@ class ReportFormFragment : Fragment() {
                 Toast.makeText(context, "Log-in to submit a report", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private suspend fun submitReport() {
@@ -190,20 +192,5 @@ class ReportFormFragment : Fragment() {
 
             return ok
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart() called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop() called")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

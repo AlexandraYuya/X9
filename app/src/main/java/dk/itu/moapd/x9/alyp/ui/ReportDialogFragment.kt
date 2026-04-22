@@ -8,10 +8,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportDialogBinding
-import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
 import dk.itu.moapd.x9.alyp.model.Report
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +20,17 @@ import java.text.DateFormat
  * Builder determines the content of the dialog.
  */
 class ReportDialogFragment : DialogFragment() {
-
+    companion object {
+        private const val TAG = "ReportDialogFragment"
+        private const val REPORT_DIALOG = "report_dialog"
+        fun newInstance(report: Report): ReportDialogFragment {
+            return ReportDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(REPORT_DIALOG, report)
+                }
+            }
+        }
+    }
     private val reportViewModel: ReportViewModel by activityViewModels()
     fun toDate(date: Long) : String {
         return DateFormat.getInstance().format(date)
@@ -71,15 +79,5 @@ class ReportDialogFragment : DialogFragment() {
             .setPositiveButton("OK", null)
             .create()
         } ?: throw IllegalStateException("Activity cannot be null")
-    }
-    companion object {
-        private const val REPORT_DIALOG = "report_dialog"
-        fun newInstance(report: Report): ReportDialogFragment {
-            return ReportDialogFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(REPORT_DIALOG, report)
-                }
-            }
-        }
     }
 }

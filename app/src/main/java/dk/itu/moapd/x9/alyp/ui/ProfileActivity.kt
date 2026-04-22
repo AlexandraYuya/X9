@@ -58,25 +58,9 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart() called")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume() called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop() called")
-    }
-
     private fun startMainActivity() {
         Intent(this, MainActivity::class.java).apply {
             startActivity(this)
-            finish()
         }
     }
 }
