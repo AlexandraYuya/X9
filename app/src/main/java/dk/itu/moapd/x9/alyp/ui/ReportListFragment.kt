@@ -38,14 +38,9 @@ class ReportListFragment : Fragment() {
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
-    val reportViewModel: ReportViewModel by activityViewModels()
+    private val reportViewModel: ReportViewModel by activityViewModels()
     private lateinit var adapter: ReportListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total reports: ${reportViewModel.reports.value.size}")
-        Log.d(TAG, "onCreate() called")
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = FragmentReportListBinding.inflate(inflater, container, false).also {

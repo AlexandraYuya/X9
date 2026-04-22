@@ -14,12 +14,8 @@ class ReportViewModel : ViewModel() {
     private val reportRepository by lazy { ReportRepository() }
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
+    private val userId = auth.currentUser?.uid
     val reports: StateFlow<List<Report>> = _reports
-
-    init {
-        loadPublicReports()
-    }
-    val userId = auth.currentUser?.uid
 
     // coroutine scopes to run on separate thread, can run asynchronous code. Non blocking while querying database.
     // work that needs to be executed only if the viewmodel is active. automatically canceled if the viewmodel is cleared.

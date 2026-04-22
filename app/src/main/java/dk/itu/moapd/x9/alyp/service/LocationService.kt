@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.asSharedFlow
  * Location updates are requested every 2 minutes.
  * Updates are never more frequent than every 1 minute.
  * Batched updates are delivered at most every 10 minutes.
+ *
+ * Inspired by Fabricio Narcizo's code examples from "09-2_MyLocation-MDC": https://github.com/fabricionarcizo/moapd2026/tree/main/lecture09/09-2_MyLocation-MDC
  */
 class LocationService : Service() {
 
@@ -58,6 +60,10 @@ class LocationService : Service() {
             get() = this@LocationService
     }
     private val localBinder = LocalBinder()
+
+    /**
+     * Main instance for recieving location updates, access point.
+     */
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private val _locationUpdates = MutableSharedFlow<Location>(replay = 1) // holds the last known location for new collectors

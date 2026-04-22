@@ -37,14 +37,30 @@ import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-class MapsFragment : Fragment() {
-    companion object {
-        private const val TAG = "MapsFragment"
-    }
+/**
+ * MapsFragment displays an interactive Google Map showing incident report markers and the user's current location.
+ *
+ * Report markers are color coded by upvote count:
+ * - Azure if 0–2 upvotes
+ * - Orange if 3–9 upvotes
+ * - Red if 10+ upvotes
+ *
+ * Location tracking is handled by binding to LocationService, which provides
+ * continuous GPS updates. The fragment binds to the service in onStart and unbinds in onStop to avoid unnecessary
+ * battery drain when the map is not visible as it has to update location every so often.
+ *
+ * The map is initialized asynchronously via SupportMapFragment.getMapAsync.
+ * Report markers are collected from ReportViewModel inside the OnMapReadyCallback to guarantee the map is ready before any markers are added.
+ *
+ * Inspired by Android Developers 'User Location" articles https://developer.android.com/develop/sensors-and-location/location/permissions
+ * Inspired by Google Developers 'Maps SDK for Android - Draw on a map' article https://developers.google.com/maps/documentation/android-sdk/advanced-markers/overview
+ * Inspired by Fabricio Narcizo's code examples from "09-4_GoogleMaps-MDC": https://github.com/fabricionarcizo/moapd2026/tree/main/lecture09/09-4_GoogleMaps-MDC
+ */
 
-    /**
-     * Fields + properties
-     */
+private const val TAG = "MapsFragment"
+
+class MapsFragment : Fragment() {
+    // The fragment's view can be destroyed independently of the fragments lifetime.
     private var _binding: FragmentMapsBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
@@ -98,6 +114,14 @@ class MapsFragment : Fragment() {
             if (checkPermission()) { // checks if user already gave permission, if not then skips location subscription
                 locationService?.subscribeToLocationUpdates()
             }
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                locationService?.locationUpdates?.collect { location ->
+                    googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        LatLng(location.latitude, location.longitude), 15f
+                    ))
+                }
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -115,7 +139,7 @@ class MapsFragment : Fragment() {
         // Update the Google Maps object. The entry point for managing the underlying map features and data.
         this.googleMap = googleMap
 
-        // We use the view's root to find out how big the system bars are.
+        // We use the view's root to find out how big the system UI bars are.
         view?.let { fragmentView ->
             ViewCompat.setOnApplyWindowInsetsListener(fragmentView) { _, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -129,12 +153,6 @@ class MapsFragment : Fragment() {
             ViewCompat.requestApplyInsets(fragmentView)
         }
 
-        // Add a marker in IT University of Copenhagen and move the camera.
-        val itu = LatLng(55.6596, 12.5910)
-        googleMap.addMarker(MarkerOptions()
-            .position(itu)
-            .title("IT University of Copenhagen"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(itu))
         googleMap.isTrafficEnabled = true
 
         // Set the Google Maps style.
@@ -163,34 +181,38 @@ class MapsFragment : Fragment() {
         }
     }
 
-    /**
-     * Lifecycle methods
-     */
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View {
+        Log.d(TAG, "onCreateView() called")
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager
-            .findFragmentById(binding.map.id) as SupportMapFragment? // SupportMapFragment: A fragment for managing the lifecycle of a GoogleMap object.
-        mapFragment?.getMapAsync(callback)
+        Log.d(TAG, "onViewCreated() called")
+        val mapFragment = childFragmentManager.findFragmentById(binding.map.id) as SupportMapFragment? // SupportMapFragment: A fragment for managing the lifecycle of a GoogleMap object.
+        mapFragment?.getMapAsync(callback) // get map async, callback is called once map is ready
     }
 
     override fun onStart() {
         super.onStart()
+        Log.d(TAG, "onStart() called")
 
+        // create connection to LocationService to start recieiving location updates
         val serviceIntent = Intent(requireContext(), LocationService::class.java)
-        requireActivity().bindService( // create connection to LocationService
+        requireActivity().bindService(
             serviceIntent,
             serviceConnection,
             Context.BIND_AUTO_CREATE
         )
     }
 
+    /**
+     * Unsubscribes from location updates and unbinds from LocationService to avoid unnecessary battery drain when the map is not visible.
+     */
     override fun onStop() {
         super.onStop()
+        Log.d(TAG, "onStop() called")
         if (locationServiceBound) {
             locationService?.unsubscribeToLocationUpdates()
             requireActivity().unbindService(serviceConnection)
@@ -200,13 +222,17 @@ class MapsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.d(TAG, "onDestroyView() called")
         _binding = null
     }
 
     /**
-     * Private helper methods
+     * Adds a colour coded marker to the map for the given report.
+     * Marker hue is determined by amount of upvoteCounts.
+     *
+     * @param report The report to add a marker for.
+     * @param googleMap The map instance to add the marker to.
      */
-
     private fun addReportMarker(report: Report, googleMap: GoogleMap) {
         val hue = when  {
             report.upvoteCount >= 10 -> BitmapDescriptorFactory.HUE_RED
@@ -219,19 +245,25 @@ class MapsFragment : Fragment() {
             .icon(BitmapDescriptorFactory.defaultMarker(hue))
         )
     }
-    private fun checkPermission() =
-        ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
 
+    /**
+     * Boolean check whether Location permission has been granted by the user.
+     */
+    private fun checkPermission() = ActivityCompat.checkSelfPermission(
+        requireContext(),
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+
+    /**
+     * Enables my location, showing the user's current position as a blue dot.
+     */
     private fun enableMyLocation() {
         try {
             if (checkPermission()) {
                 googleMap?.isMyLocationEnabled = true
             }
-        } catch (e: SecurityException) {
-            Log.e(TAG, "Cannot enable location: ${e.message}")
+        } catch (ex: SecurityException) {
+            Log.e(TAG, "Cannot enable location: ${ex.message}")
         }
     }
 }

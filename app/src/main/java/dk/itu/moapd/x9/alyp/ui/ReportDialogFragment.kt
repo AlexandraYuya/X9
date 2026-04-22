@@ -32,7 +32,7 @@ class ReportDialogFragment : DialogFragment() {
         }
     }
     private val reportViewModel: ReportViewModel by activityViewModels()
-    fun toDate(date: Long) : String {
+    private fun toDate(date: Long) : String {
         return DateFormat.getInstance().format(date)
     }
 

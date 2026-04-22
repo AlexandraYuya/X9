@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,22 +16,23 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityMainBinding
+import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 
 /**
- * MainActivity The one and only activity in X9 app.
- *  Base activity where the inner content is dynamically changed out with fragment navigation.
- * Uses dynamic colours defined in the themes.xml & colors.xml files.
+ * MainActivity is the base activity where the inner content is dynamically switched out with fragment navigation.
  * NavHostFragment is the actual fragment managing the screen area.
  * NavController is the host's controller which manages the destinations,
  *  and actions between destinations in nav_graph.xml and sets it up with the bottom navigation menu.
  */
+
+private const val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
-    companion object {
-        private const val TAG = "MainActivity"
-    }
+    // The activity's view exists for the entire lifetime of the activity.
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var navController: NavController
+    private val reportViewModel: ReportViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
+        reportViewModel.loadPublicReports()
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(
@@ -70,6 +74,10 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Controls visibility of menu items based on authentication state.
+     * Login is shown when signed out, logout and profile are shown when signed in.
+     */
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         menu?.findItem(R.id.action_logout)?.isVisible = auth.currentUser != null
         menu?.findItem(R.id.action_login)?.isVisible = auth.currentUser == null
@@ -77,7 +85,9 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    // configure paths/actions for appbar navigation
+    /**
+     * Configure paths/actions for toolbar navigation.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
@@ -106,13 +116,14 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
     private fun startProfileActivity() {
         Intent(this, ProfileActivity::class.java).apply {
             startActivity(this)
         }
     }
-
+    /**
+     * Intentional design decision, when signing out, we don't close our activity, instead we disable the profile access and report publishing.
+     */
     private fun signOut(context: Context) {
         auth.signOut()
         Toast.makeText(context, "signed out, user reports are no longer visible", Toast.LENGTH_LONG).show()

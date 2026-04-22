@@ -18,6 +18,7 @@ class X9Application : Application() {
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate() called")
+        // Uses dynamic colours defined in the themes.xml & colors.xml files.
         DynamicColors.applyToActivitiesIfAvailable(this)
         Firebase.database(DATABASE_URL).setPersistenceEnabled(true)
         Firebase.database(DATABASE_URL).reference.keepSynced(true)

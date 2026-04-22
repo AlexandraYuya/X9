@@ -44,12 +44,12 @@ class ReportFormFragment : Fragment() {
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
-    val reportViewModel: ReportViewModel by activityViewModels()
-    val cameraViewModel: CameraViewModel by activityViewModels()
-    val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    private val reportViewModel: ReportViewModel by activityViewModels()
+    private val cameraViewModel: CameraViewModel by activityViewModels()
+    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        Log.d(TAG, "onCreateView() called")
         _binding = FragmentReportFormBinding.inflate(inflater, container, false).also {
             auth = FirebaseAuth.getInstance()
         }
@@ -144,7 +144,7 @@ class ReportFormFragment : Fragment() {
             description = binding.reportDescriptionInput.text.toString().trim(),
             severity = severity,
             user = auth.currentUser?.email.toString(),
-            imageUrl = cameraViewModel.imageUri.value.toString()
+            imageUrl = cameraViewModel.imageUri.value?.toString() ?: "",
         )
 
         reportViewModel.addUserReport(report)

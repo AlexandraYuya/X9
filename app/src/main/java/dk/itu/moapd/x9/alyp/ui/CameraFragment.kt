@@ -4,7 +4,6 @@ import android.Manifest
 import dk.itu.moapd.x9.alyp.R
 import android.content.ContentValues
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -48,9 +47,9 @@ import java.util.Locale
  * Runtime camera permission handling
  * Automatic navigation back to report form on successful capture and upload
  *
- * Inspired by "Getting Started with CameraX", from android studio offical documentation: https://developer.android.com/codelabs/camerax-getting-started#0
+ * Inspired by "Getting Started with CameraX", from android studio official documentation: https://developer.android.com/codelabs/camerax-getting-started#0
  * Inspired by Fabricio Narcizo's code examples from "10-4_CameraX-MDC": https://github.com/fabricionarcizo/moapd2026/tree/main/lecture10/10-4_CameraX-MDC
- * Inspired by https://firebase.google.com/docs/storage/android/upload-files#kotlin_3
+ * Inspired by firebase storage documentation https://firebase.google.com/docs/storage/android/upload-files#kotlin_3
  */
 class CameraFragment : Fragment() {
 
@@ -93,11 +92,6 @@ class CameraFragment : Fragment() {
     private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     /**
-        * Small local cache for the observed imageUri so the click listener can reference it
-      */
-    private var imageUriLocal: Uri? = null
-
-    /**
      * Permission launcher. Called when callback is initiated, and a location permission isn't found.
      * Checks if location permission has been granted, if so subscribe to location service
      */
@@ -120,8 +114,8 @@ class CameraFragment : Fragment() {
         }
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        super.onCreateView(inflater, container, savedInstanceState)
         Log.d(TAG, "onCreateView() called")
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
         return binding.root
@@ -130,13 +124,6 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
-
-        // Observe imageUri from the ViewModel so the fragment UI reflects the latest saved photo.
-        cameraViewModel.imageUri.observe(viewLifecycleOwner) { uri ->
-            // Update the local UI state if needed. Keep a small local cache so the click
-            // listener below can access it without directly reading LiveData each time.
-            imageUriLocal = uri
-        }
 
         // Request camera permissions
         if (allPermissionsGranted()) {
@@ -175,6 +162,7 @@ class CameraFragment : Fragment() {
             }
         }
     }
+
 
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
