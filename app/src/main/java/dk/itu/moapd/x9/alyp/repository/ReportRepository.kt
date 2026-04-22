@@ -18,9 +18,9 @@ import kotlin.coroutines.suspendCoroutine
  *
  * Encapsulates all database access logic so that reportViewModel does not interact with Firebase directly.
  * All report data is stored under two root paths "reports" and "upvotes":
- *  "/reports/{userId}/{reportUid}" report objects owned by each user
- *  "/upvotes/{reportUid}/count" — upvote count per report
- *  "/upvotes/{reportUid}/voters/{userId}" — tracks which users have voted st. user's cannot vote again on a report
+ *  - "/reports/{userId}/{reportUid}" report objects owned by each user
+ *  - "/upvotes/{reportUid}/count" — upvote count per report
+ *  - "/upvotes/{reportUid}/voters/{userId}" — tracks which users have voted st. user's cannot vote again on a report
  */
 class ReportRepository(private val database: DatabaseReference = Firebase.database(DATABASE_URL).reference){
     companion object {
@@ -120,12 +120,12 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
 
     /**
      * Checks whether a user has already upvoted a specific report.
-     *
-     * @param reportUid The report uid to check.
      * @param userId The Firebase uid of the user to check.
+     * @param reportUid The report uid to check.
      * @return True if the user has already voted, false otherwise.
      */
-    suspend fun hasUserVoted(reportUid: String, userId: String): Boolean {
+    suspend fun hasUserVoted(userId: String?, reportUid: String): Boolean {
+        userId ?: return false
         return database
             .child(PATH_UPVOTES)
             .child(reportUid)
@@ -136,13 +136,14 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
 
     /**
      * Increments the upvote count for a report using a Firebase transaction to prevent race conditions, and records the voter to prevent duplicate votes.
-     *
-     * @param reportUid The report uid to upvote.
      * @param userId The Firebase uid of the voting user.
+     * @param reportUid The report uid to upvote.
      * @return A pair where pair.first is true if the vote was committed successfully and pair.second is the updated upvote count.
      */
-    suspend fun upvoteReport(reportUid: String, userId: String): Pair<Boolean, Int> =
-        suspendCoroutine { continuation ->
+    suspend fun upvoteReport(userId: String?, reportUid: String): Pair<Boolean, Int> {
+        userId ?: return Pair(false, 0)
+
+        return suspendCoroutine { continuation ->
             val countRef = database.child(PATH_UPVOTES).child(reportUid).child("count")
             val voterRef = database.child(PATH_UPVOTES).child(reportUid).child("voters").child(userId)
 
@@ -161,4 +162,5 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
                 }
             })
         }
+    }
 }

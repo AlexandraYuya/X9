@@ -28,18 +28,19 @@ import java.util.UUID
 import kotlin.getValue
 
 /**
- * ReportFormFragment represents the second fragment after the list fragment.
- * Determines the input for the form fields.
- * Validates input upon submitting before storing the new Report object.
- * Navigates back to ReportListFragment upon successful submitting.
+ * ReportFormFragment allows a signed-in user to submit a new incident report.
+ *
+ * Provides input fields for title, location, date/time, type, description and severity.
+ * Geocodes the entered address to latitude/longitude coordinates upon submission using Android's built-in Geocoder.
+ * Optionally attaches a photo captured via CameraFragment.
+ *
+ * Navigates to CameraFragment when the camera button is clicked, and back to ReportListFragment on successful report submission.
  */
-class ReportFormFragment : Fragment() {
-    companion object {
-        private const val TAG = "ReportFormFragment"
-    }
+private const val TAG = "ReportFormFragment"
 
-    private var _binding: FragmentReportFormBinding? = null
+class ReportFormFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
+    private var _binding: FragmentReportFormBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
@@ -47,6 +48,7 @@ class ReportFormFragment : Fragment() {
     private val reportViewModel: ReportViewModel by activityViewModels()
     private val cameraViewModel: CameraViewModel by activityViewModels()
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Log.d(TAG, "onCreateView() called")
@@ -56,6 +58,9 @@ class ReportFormFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Sets up the report type dropdown, date field, camera button listener, image thumbnail observer, and submit button listener.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
@@ -102,6 +107,11 @@ class ReportFormFragment : Fragment() {
         _binding = null
     }
 
+
+    /**
+     * Validates input, geocodes the entered location address to latLng coordinates, builds a Report object and submits it via ReportViewModel.
+     * Shows a toast txt and navigates to ReportListFragment on success.
+     */
     private suspend fun submitReport() {
         if(!validateInput()) return
 
@@ -141,27 +151,28 @@ class ReportFormFragment : Fragment() {
             longitude = coordinates.longitude,
             createdAt = reportDate,
             type = binding.reportTypeInput.text.toString().trim(),
-            description = binding.reportDescriptionInput.text.toString().trim(),
+            description = binding.reportDescriptionInput.text?.toString()?.trim() ?: "",
             severity = severity,
             user = auth.currentUser?.email.toString(),
             imageUrl = cameraViewModel.imageUri.value?.toString() ?: "",
         )
 
         reportViewModel.addUserReport(report)
-        Log.d(TAG, "Report stored, Success!")
 
         Toast.makeText(requireContext(), "Report stored successfully!", Toast.LENGTH_SHORT).show()
 
         findNavController().navigate(R.id.action_reportFormFragment_to_reportListFragment)
     }
 
+    /**
+     * Validator to check if form text fields are blank or wrongly formatted
+     */
     private fun validateInput(): Boolean {
         with(binding) {
             reportTitleLayout.error = null
             reportLocationLayout.error = null
             reportDateLayout.error = null
             reportTypeLayout.error = null
-            reportDescriptionLayout.error = null
 
             var ok = true
             val reportDate = reportDateTimeInput.text?.toString()?.trim().orEmpty()
@@ -183,10 +194,6 @@ class ReportFormFragment : Fragment() {
             }
             if (reportTypeInput.text?.toString()?.trim().orEmpty().isBlank()) {
                 binding.reportTypeLayout.error = getString(R.string.error_required)
-                ok = false
-            }
-            if (reportDescriptionInput.text?.toString()?.trim().orEmpty().isBlank()) {
-                binding.reportDescriptionLayout.error = getString(R.string.error_required)
                 ok = false
             }
 

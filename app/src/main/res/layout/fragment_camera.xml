@@ -40,19 +40,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        style="?attr/materialIconButtonOutlinedStyle"
-        android:id="@+id/button_image_viewer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Gallery"
-        app:icon="@drawable/gallery"
-        app:iconSize="48dp"
-        app:iconTint="@android:color/white"
-        app:strokeColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/button_image_capture"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_image_capture"
-        app:layout_constraintTop_toTopOf="@+id/button_image_capture" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,18 +12,25 @@ import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.ActivityProfileBinding
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 
-class ProfileActivity : AppCompatActivity() {
-    companion object {
-        private const val TAG = "ProfileActivity"
-    }
+private const val TAG = "ProfileActivity"
 
+/**
+ * ProfileActivity displays the current user's submitted reports in a list.
+ * Allows the user to swipe to delete their own reports.
+ * MainActivity and ProfileActivity reuses the ReportListFragment. ProfileActivity uses ReportListFragment with allowDelete enabled.
+ */
+class ProfileActivity : AppCompatActivity() {
     private lateinit var binding : ActivityProfileBinding
     private lateinit var auth: FirebaseAuth
     private val reportViewModel : ReportViewModel by viewModels()
 
+    /**
+     * Initializes the activity, loads the current user's reports if signed-in.
+     * Adds ReportListFragment with swipe to delete enabled.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate(Bundle?) called")
+        Log.d(TAG, "onCreate() called")
 
         auth = FirebaseAuth.getInstance()
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -40,13 +47,17 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    // inflate the toolbar's menu
+    /**
+     * Inflate the toolbar's menu.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.profile_app_bar, menu)
         return true
     }
 
-    // configure paths/actions for appbar navigation
+    /**
+     * Configure paths/actions for toolbar's navigation.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_back -> {

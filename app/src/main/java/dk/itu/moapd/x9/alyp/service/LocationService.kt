@@ -69,8 +69,10 @@ class LocationService : Service() {
     private val _locationUpdates = MutableSharedFlow<Location>(replay = 1) // holds the last known location for new collectors
     val locationUpdates = _locationUpdates.asSharedFlow()
 
+
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, "onCreate() called")
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this) // client for recieving location permissions, entry point to use location APIs
         locationCallback = object : LocationCallback() {
@@ -83,6 +85,7 @@ class LocationService : Service() {
             }
         }
     }
+
 
     /**
      * Called when a client binds to this service.

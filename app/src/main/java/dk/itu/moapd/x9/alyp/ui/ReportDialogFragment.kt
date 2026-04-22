@@ -6,23 +6,29 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import coil.load
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportDialogBinding
 import dk.itu.moapd.x9.alyp.model.Report
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
-import kotlinx.coroutines.launch
 import java.text.DateFormat
 
 /**
- * ReportDialogFragment represents an alert dialog that pops up when a report is clicked.
+ * ReportDialogFragment displays the full details of a clicked report in an alert dialog that pops up when a report is clicked.
  * Builder determines the content of the dialog.
+ * Uses a factory method newInstance to pass the Report object safely via a Bundle, since fragments must have an empty constructor.
  */
 class ReportDialogFragment : DialogFragment() {
     companion object {
-        private const val TAG = "ReportDialogFragment"
+        /**
+         * The key used to store and retrieve the Report object from the fragment's Bundle.
+         */
         private const val REPORT_DIALOG = "report_dialog"
+
+        /**
+         * Factory method for creating a ReportDialogFragment with a Report object attached.
+         * @param report The report to display in the dialog.
+         */
         fun newInstance(report: Report): ReportDialogFragment {
             return ReportDialogFragment().apply {
                 arguments = Bundle().apply {
@@ -32,20 +38,30 @@ class ReportDialogFragment : DialogFragment() {
         }
     }
     private val reportViewModel: ReportViewModel by activityViewModels()
+
+    /**
+     * Formats a Unix timestamp in milliseconds to a readable date string.
+     * @param date Unix timestamp in milliseconds.
+     * @return Formatted date string.
+     */
     private fun toDate(date: Long) : String {
         return DateFormat.getInstance().format(date)
     }
 
+    /**
+     * Builds and returns the alert dialog with the report's image, details, and upvote button.
+     */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report
         val view = FragmentReportDialogBinding.inflate(layoutInflater) // one off inflation of the view, don't need persistent binding since we don't need to manage fragment's lifecycle.
 
         // Load upvote count and check if user already voted
-        lifecycleScope.launch {
-            view.upvoteCount.text = getString(R.string.upvote_text, report.upvoteCount)
-            val alreadyVoted = reportViewModel.hasUserVoted(report.uid)
+        reportViewModel.hasUserVoted(report.uid) { alreadyVoted ->
             view.upvoteButton.isEnabled = !alreadyVoted
-            if (alreadyVoted) view.upvoteButton.text = getString(R.string.already_voted)
+            if (alreadyVoted) {
+                view.upvoteButton.text = getString(R.string.already_voted)
+            }
+            view.upvoteCount.text = getString(R.string.upvote_text, report.upvoteCount)
         }
 
         view.upvoteButton.setOnClickListener {
@@ -58,8 +74,9 @@ class ReportDialogFragment : DialogFragment() {
             }
         }
 
+        // uses Coil image library to load the image from Firebase Storage download URL.
         if (report.imageUrl.isNotEmpty()) {
-            view.dialogImage.visibility = View.VISIBLE // hidden by default only not hidden if an image exists, not all reports have images
+            view.dialogImage.visibility = View.VISIBLE // hidden by default only not hidden if an image exists, not all reports have images.
             view.dialogImage.load(report.imageUrl)
         }
 

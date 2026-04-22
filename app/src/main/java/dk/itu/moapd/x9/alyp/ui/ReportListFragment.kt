@@ -20,15 +20,22 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 /**
- * ReportListFragment is the default fragment shown.
- * Observes changes to the MutableLiveData List of reports for any changes.
- * Calls the update method in the custom adapter with the new reports
+ * ReportListFragment displays a scrollable list of incident reports using a [RecyclerView].
+ *
+ * Observes reports for realtime updates and passes them to ReportListAdapter.
+ * Clicking a report opens a ReportDialogFragment with full details.
+ *
+ * When instantiated with newInstance and ARG_ALLOW_DELETE set to true (used in ProfileActivity), swipe-to-delete is enabled allowing users to remove their own reports.
  */
 class ReportListFragment : Fragment() {
-
     companion object {
         private const val TAG = "ReportListFragment"
+        // The key used to pass the allowDelete flag via a Bundle.
         private const val ARG_ALLOW_DELETE = "allow_delete"
+        /**
+         * Factory method for creating a ReportListFragment.
+         * @param allowDelete If true, enables swipe to delete on the list. Defaults to false.
+         */
         fun newInstance(allowDelete: Boolean = false) = ReportListFragment().apply {
             arguments = Bundle().apply { putBoolean(ARG_ALLOW_DELETE, allowDelete) }
         }
@@ -42,12 +49,15 @@ class ReportListFragment : Fragment() {
     private lateinit var adapter: ReportListAdapter
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = FragmentReportListBinding.inflate(inflater, container, false).also {
-        _binding = it
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Log.d(TAG, "onCreateView() called")
-    }.root
+        _binding = FragmentReportListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    /**
+     * Sets up the RecyclerView with ReportListAdapter, observes reports for updates, and attaches swipe to delete via ItemTouchHelper if ARG_ALLOW_DELETE is true.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
@@ -60,8 +70,8 @@ class ReportListFragment : Fragment() {
         binding.reportListFragment.layoutManager = LinearLayoutManager(requireContext())
         binding.reportListFragment.adapter = adapter
 
-        // recieve all updates to the database, flow representds an async stream of data.
-        // flow emits a sequence of values which 'collect' observes
+        // Recieve all updates to the database, flow represents an async stream of data.
+        // Flow emits a sequence of values which 'collect' observes
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 reportViewModel.reports.collect { report ->

@@ -16,12 +16,12 @@ import dk.itu.moapd.x9.alyp.R
  *
  * Launches the Firebase UI sign-in screen immediately on creation. Email, phone, and Google sign-in options.
  * On successful authentication the user is navigated to MainActivity. On failure, the activity relaunches.
+ *
+ * Inspired by Firebase documentation for 'Sign in with a pre-built UI' https://firebase.google.com/docs/auth/android/firebaseui
  */
-class LoginActivity : AppCompatActivity() {
-    companion object {
-        private const val TAG ="LoginActivity"
-    }
+private const val TAG ="LoginActivity"
 
+class LoginActivity : AppCompatActivity() {
     /**
      * Launcher for the Firebase UI sign-in flow.
      * Delivers the authentication result to onSignInResult.
@@ -57,6 +57,10 @@ class LoginActivity : AppCompatActivity() {
         signInLauncher.launch(signInIntent)
     }
 
+    /**
+     * Handles results from sign-in attempt, on success retriece the current user, display a success text and navigate to MainActivity.
+     * On failed sign-in attempt, navigate back to sign-in screen.
+     */
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             val user = FirebaseAuth.getInstance().currentUser

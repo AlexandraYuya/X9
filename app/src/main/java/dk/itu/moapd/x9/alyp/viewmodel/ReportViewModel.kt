@@ -9,16 +9,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-private const val TAG = "ReportViewModel"
 class ReportViewModel : ViewModel() {
     private val reportRepository by lazy { ReportRepository() }
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val _reports = MutableStateFlow<List<Report>>(emptyList())
     private val userId = auth.currentUser?.uid
+    private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports
 
-    // coroutine scopes to run on separate thread, can run asynchronous code. Non blocking while querying database.
-    // work that needs to be executed only if the viewmodel is active. automatically canceled if the viewmodel is cleared.
+    /**
+     * viewModelScope is a coroutine scoped to run on separate thread, can run asynchronous code. Non blocking while querying database.
+     * Work that needs to be executed only if the viewmodel is active. automatically canceled if the viewmodel is cleared.
+     */
     fun loadPublicReports() {
         viewModelScope.launch {
             _reports.value = reportRepository.getPublicReports()
@@ -35,8 +36,6 @@ class ReportViewModel : ViewModel() {
             loadPublicReports()
         }
     }
-
-    // clears all reports from current logged in user
     fun deleteUserReport(reportUid: String) {
         viewModelScope.launch {
             reportRepository.deleteUserReport(userId, reportUid)
@@ -45,15 +44,15 @@ class ReportViewModel : ViewModel() {
     }
 
     fun upvoteReport(reportUid: String, onResult: (Boolean, Int) -> Unit) {
-        val uid = userId ?: return
         viewModelScope.launch {
-            val (success, newCount) = reportRepository.upvoteReport(reportUid, uid)
+            val (success, newCount) = reportRepository.upvoteReport(userId, reportUid)
             onResult(success, newCount)
         }
     }
 
-    suspend fun hasUserVoted(reportUid: String): Boolean {
-        val uid = userId ?: return false
-        return reportRepository.hasUserVoted(reportUid, uid)
+    fun hasUserVoted(reportUid: String, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            onResult(reportRepository.hasUserVoted(userId, reportUid))
+        }
     }
 }

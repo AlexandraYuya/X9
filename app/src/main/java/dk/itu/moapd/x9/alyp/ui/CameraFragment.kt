@@ -53,9 +53,6 @@ import java.util.Locale
  */
 class CameraFragment : Fragment() {
 
-    /**
-     * A set of private constants
-     */
     companion object {
         private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
         private const val TAG = "CameraFragment"
@@ -70,9 +67,7 @@ class CameraFragment : Fragment() {
             }.toTypedArray()
     }
 
-    /**
-     * Fragment specific instances
-     */
+
     private val cameraViewModel: CameraViewModel by activityViewModels()
     private val storage = Firebase.storage(FIREBASE_STORAGE_BUCKET)
     private var _binding: FragmentCameraBinding? = null
@@ -121,6 +116,9 @@ class CameraFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Sets up camera permissions, button click listeners, and ViewModel observers for the cameraSelector.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
@@ -164,6 +162,10 @@ class CameraFragment : Fragment() {
     }
 
 
+    /**
+     * Captures a photo and saves it to the device's MediaStore.
+     * On success uploads the image to Firebase Storage and stores the download URL in CameraViewModel before navigating back to ReportFormFragment.
+     */
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
@@ -222,6 +224,10 @@ class CameraFragment : Fragment() {
         )
     }
 
+    /**
+     * Initializes and binds the camera preview and image capture to the fragment's lifecycle using the current cameraSelector.
+     * Enables the camera switch button if the device supports front and back cameras.
+     */
     private fun startCamera() {
         // Creates an instance which is used to bind the lifecycle of the camera to the lifecycle of the owner, so they're in sync. Eliminates the need to handle opening and closing the camera since CameraX is lifecycle aware.
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
@@ -271,7 +277,7 @@ class CameraFragment : Fragment() {
     }
 
     /**
-     * checks permissions before requesting them, used in onViewCreated to decide whether to start the camera or ask for permissions
+     * checks permissions before requesting them, used in onViewCreated to decide whether to start the camera or ask for permissions.
      */
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
