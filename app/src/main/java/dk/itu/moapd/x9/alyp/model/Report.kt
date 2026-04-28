@@ -1,5 +1,6 @@
 package dk.itu.moapd.x9.alyp.model
 
+import com.google.firebase.database.Exclude
 import java.io.Serializable
 
 /**
@@ -17,5 +18,7 @@ data class Report(
     val description: String = "",
     val severity: String = "",
     val user: String = "",
-    val imageUrl: String = ""
+    val imageUrl: String = "",
+    @get:Exclude // so firebase never writes this value to DB
+    val isConfirmed: Boolean = false
 ) : Serializable

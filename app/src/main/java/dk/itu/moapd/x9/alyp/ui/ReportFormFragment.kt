@@ -1,5 +1,9 @@
 package dk.itu.moapd.x9.alyp.ui
 
+import android.Manifest
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -9,13 +13,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportFormBinding
 import dk.itu.moapd.x9.alyp.model.Report
+import dk.itu.moapd.x9.alyp.service.GeofenceBroadcastReceiver
 import dk.itu.moapd.x9.alyp.viewmodel.CameraViewModel
 import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import kotlinx.coroutines.Dispatchers
@@ -36,9 +45,11 @@ import kotlin.getValue
  *
  * Navigates to CameraFragment when the camera button is clicked, and back to ReportListFragment on successful report submission.
  */
-private const val TAG = "ReportFormFragment"
-
 class ReportFormFragment : Fragment() {
+    companion object {
+        private const val TAG = "ReportFormFragment"
+        const val GEOFENCE_EXPIRATION_IN_MILLISECONDS = 60_000L
+    }
     private lateinit var auth: FirebaseAuth
     private var _binding: FragmentReportFormBinding? = null
     private val binding
@@ -100,6 +111,24 @@ class ReportFormFragment : Fragment() {
                 Toast.makeText(context, "Sign-in to submit a report", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Autofill location from GPS
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.getFusedLocationProviderClient(requireActivity())
+                .lastLocation
+                .addOnSuccessListener { location ->
+                    if (location == null) return@addOnSuccessListener
+                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                        val address = Geocoder(requireContext(), Locale.getDefault())
+                            .getFromLocation(location.latitude, location.longitude, 1)
+                            ?.firstOrNull()?.getAddressLine(0) ?: return@launch
+                        withContext(Dispatchers.Main) {
+                            binding.reportLocationInput.setText(address)
+                        }
+                    }
+                }
+        }
     }
 
     override fun onDestroyView() {
@@ -158,6 +187,7 @@ class ReportFormFragment : Fragment() {
         )
 
         reportViewModel.addUserReport(report)
+        registerConfirmationGeofences(report)
 
         Toast.makeText(requireContext(), "Report stored successfully!", Toast.LENGTH_SHORT).show()
 
@@ -198,6 +228,56 @@ class ReportFormFragment : Fragment() {
             }
 
             return ok
+        }
+    }
+
+    /**
+     * Registers geofences around all existing reports of the same type as newReport using GeofencingClient.
+     * Uses INITIAL_TRIGGER_ENTER so that if the device is already inside any of the geofences at registration time, the entry transition fires immediately.
+     * If triggered, GeofenceBroadcastReceiver marks both the overlapping report and newReport as confirmed in Firebase.
+     *
+     * @param newReport The newly submitted report to check confirmation against.
+     */
+    private fun registerConfirmationGeofences(newReport: Report) {
+        // check if reports are of the same type, and isn't the same report.
+        val sameTypeReports = reportViewModel.reports.value.filter {
+            it.type == newReport.type && it.uid != newReport.uid
+        }
+        // else return, only need to check geofence radius if reports of same types exist
+        if (sameTypeReports.isEmpty()) return
+
+        // create geofence per report
+        val geofenceList = sameTypeReports.map { report ->
+            Geofence.Builder()
+                .setRequestId(report.uid) // set ID of geofence to ID of report
+                .setCircularRegion(report.latitude, report.longitude, GeofenceBroadcastReceiver.GEOFENCE_RADIUS_METERS) // radius around report point
+                .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS) // geofence gets automatically removed after period ends
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER) // track entry
+                .build()
+        }
+
+        // register how related geofences are triggered
+        val request = GeofencingRequest.Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER) // triggers if the device is already inside the geofence
+            .addGeofences(geofenceList)
+            .build()
+
+        // starts the broadcastReciever which gets updates when geofence is triggered
+        val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
+            .putExtra(GeofenceBroadcastReceiver.EXTRA_NEW_REPORT_UID, newReport.uid)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(), 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
+
+        // if have necessary permissions, add geofence
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.getGeofencingClient(requireActivity())
+                .addGeofences(request, pendingIntent)
+                .addOnSuccessListener { Log.d(TAG, "Geofences registered for confirmation check") }
+                .addOnFailureListener { Log.e(TAG, "Failed to register geofences: ${it.message}") }
         }
     }
 }

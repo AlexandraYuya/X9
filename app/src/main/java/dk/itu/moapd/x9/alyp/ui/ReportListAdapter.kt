@@ -1,6 +1,7 @@
 package dk.itu.moapd.x9.alyp.ui
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.moapd.x9.alyp.databinding.ListItemReportBinding
@@ -16,6 +17,13 @@ class ReportHolder(
         binding.reportTitle.text = report.title
         binding.reportDate.text = toDate(report.createdAt)
         binding.reportAuthor.text = report.user
+
+        binding.confirmedBadge.visibility =
+            if(report.isConfirmed) {
+                View.VISIBLE
+            }else {
+                View.GONE
+            }
 
         binding.root.setOnClickListener {
             onItemClick(report)

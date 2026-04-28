@@ -40,10 +40,9 @@ import kotlin.getValue
 /**
  * MapsFragment displays an interactive Google Map showing incident report markers and the user's current location.
  *
- * Report markers are color coded by upvote count:
- * - Azure if 0–2 upvotes
- * - Orange if 3–9 upvotes
- * - Red if 10+ upvotes
+ * Report markers are color coded by their confirmation check:
+ * - Green confirmed reports, 2 or more reports of the same type and created within geofence radius
+ * - Red unconfirmed reports
  *
  * Location tracking is handled by binding to LocationService, which provides
  * continuous GPS updates. The fragment binds to the service in onStart and unbinds in onStop to avoid unnecessary
@@ -228,21 +227,20 @@ class MapsFragment : Fragment() {
 
     /**
      * Adds a colour coded marker to the map for the given report.
-     * Marker hue is determined by amount of upvoteCounts.
+     * Marker hue is determined by the isConfirmed check when a report is validated.
      *
      * @param report The report to add a marker for.
      * @param googleMap The map instance to add the marker to.
      */
     private fun addReportMarker(report: Report, googleMap: GoogleMap) {
-//        val hue = when  {
-//            report.upvoteCount >= 10 -> BitmapDescriptorFactory.HUE_RED
-//            report.upvoteCount >= 3 -> BitmapDescriptorFactory.HUE_ORANGE
-//            else -> BitmapDescriptorFactory.HUE_AZURE
-//        }
+        val hue = when  {
+            report.isConfirmed -> BitmapDescriptorFactory.HUE_GREEN
+            else -> BitmapDescriptorFactory.HUE_RED
+        }
         googleMap.addMarker(MarkerOptions()
             .position(LatLng(report.latitude, report.longitude))
             .title(report.title)
-//            .icon(BitmapDescriptorFactory.defaultMarker(hue))
+            .icon(BitmapDescriptorFactory.defaultMarker(hue))
         )
     }
 

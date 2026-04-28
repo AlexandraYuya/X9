@@ -5,12 +5,10 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import coil.load
 import dk.itu.moapd.x9.alyp.R
 import dk.itu.moapd.x9.alyp.databinding.FragmentReportDialogBinding
 import dk.itu.moapd.x9.alyp.model.Report
-import dk.itu.moapd.x9.alyp.viewmodel.ReportViewModel
 import java.text.DateFormat
 
 /**
@@ -37,7 +35,6 @@ class ReportDialogFragment : DialogFragment() {
             }
         }
     }
-    private val reportViewModel: ReportViewModel by activityViewModels()
 
     /**
      * Formats a Unix timestamp in milliseconds to a readable date string.
@@ -49,7 +46,7 @@ class ReportDialogFragment : DialogFragment() {
     }
 
     /**
-     * Builds and returns the alert dialog with the report's image, details, and upvote button.
+     * Builds and returns the alert dialog with the report's image and details
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report

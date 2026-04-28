@@ -1,34 +1,34 @@
 package dk.itu.moapd.x9.alyp.repository
 
 import com.google.firebase.Firebase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.MutableData
-import com.google.firebase.database.Transaction
 import com.google.firebase.database.database
 import dk.itu.moapd.x9.alyp.core.DATABASE_URL
 import dk.itu.moapd.x9.alyp.model.Report
 import kotlinx.coroutines.tasks.await
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Repository for reading and writing report data to Firebase Realtime Database.
  *
  * Encapsulates all database access logic so that reportViewModel does not interact with Firebase directly.
- * All report data is stored under two root paths "reports" and "upvotes":
+ * All report data is stored under two root paths "reports" and "confirmations":
  *  - "/reports/{userId}/{reportUid}" report objects owned by each user
- *  - "/upvotes/{reportUid}/count" — upvote count per report
- *  - "/upvotes/{reportUid}/voters/{userId}" — tracks which users have voted st. user's cannot vote again on a report
+ *  - "/confirmations/{reportUid}/ — tracks which reports have been confirmed
  */
 class ReportRepository(private val database: DatabaseReference = Firebase.database(DATABASE_URL).reference){
     companion object {
         private const val PATH_REPORTS = "/reports"
-        private const val PATH_UPVOTES = "/upvotes"
         private const val CHILD_CREATED_AT = "createdAt"
-        private const val COUNT = "count"
-        private const val VOTERS = "voters"
+        private const val PATH_CONFIRMATIONS = "confirmations"
+    }
+
+    private suspend fun isReportConfirmed(reportUid: String): Boolean {
+        return database
+            .child(PATH_CONFIRMATIONS)
+            .child(reportUid)
+            .get()
+            .await()
+            .getValue(Boolean::class.java) ?: false
     }
 
     /**
@@ -53,12 +53,12 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
 
     /**
      * Fetches all reports from all users, ordered by 'createdAt'.
-     * Each report's upvoteCount is populated from the /upvotes/ path.
+     * returns reports with a isConfirmed check
      *
      * @return A list of all report objects from all users.
      */
     suspend fun getPublicReports(): List<Report> {
-        return database
+        val reports =  database
             .child(PATH_REPORTS)
             .orderByChild(CHILD_CREATED_AT)
             .get()
@@ -69,6 +69,9 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
                     it.getValue(Report::class.java)
                 }
             }
+        return reports.map { report ->
+            report.copy(isConfirmed = isReportConfirmed(report.uid))
+        }
     }
 
     /**
@@ -98,6 +101,11 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
         database
             .child(PATH_REPORTS)
             .child(userId)
+            .child(reportUid)
+            .removeValue()
+            .await()
+        database
+            .child(PATH_CONFIRMATIONS)
             .child(reportUid)
             .removeValue()
             .await()

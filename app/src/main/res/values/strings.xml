@@ -45,20 +45,17 @@
     <string name="report_form_title">Report Form🦞</string>
     <string name="user_reports_title">User\'s reports💃</string>
     <string name="public_reports_title">Public Reports 🙆‍♀️</string>
-    <!-- Upvote counter -->
-    <string name="upvote_text">"%1$d upvotes"</string>
-    <string name="already_voted">Already voted</string>
+    <!-- Camera -->
     <string name="report_image_description">Report Image</string>
     <string name="report_image_button">Report Image button</string>
     <string name="switch_camera">Switch camera</string>
     <string name="capture">Capture</string>
-    <string name="confirm_report">Confirm report</string>
-    <string name="_0_confirmations">0 confirmations</string>
     <!-- Report severity array -->
     <string-array name="report_types_array">
         <item>Accident</item>
         <item>Speed Check</item>
         <item>Traffic</item>
         <item>Apocalypse</item>
+        <item>Tsunami</item>
     </string-array>
 </resources>
