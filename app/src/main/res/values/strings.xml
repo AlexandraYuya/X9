@@ -45,11 +45,15 @@
     <string name="report_form_title">Report Form🦞</string>
     <string name="user_reports_title">User\'s reports💃</string>
     <string name="public_reports_title">Public Reports 🙆‍♀️</string>
+
     <!-- Camera -->
     <string name="report_image_description">Report Image</string>
     <string name="report_image_button">Report Image button</string>
     <string name="switch_camera">Switch camera</string>
     <string name="capture">Capture</string>
+
+    <string name="confirmed">confirmed</string>
+
     <!-- Report severity array -->
     <string-array name="report_types_array">
         <item>Accident</item>

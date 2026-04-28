@@ -11,7 +11,7 @@ import com.google.firebase.database.database
 import dk.itu.moapd.x9.alyp.core.DATABASE_URL
 
 /**
- * Handles Geofence transitions, recieves the intent from pendingIntent from the request to add geofences.
+ * Handles Geofence transitions, receives the intent from pendingIntent from the request to add geofences.
  * Inspired by Android developers official document on 'Geofencing API': https://developer.android.com/develop/sensors-and-location/location/geofencing
  */
 class GeofenceBroadcastReceiver : BroadcastReceiver() {

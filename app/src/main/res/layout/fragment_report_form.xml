@@ -120,6 +120,9 @@
                 android:inputType="textCapSentences|textPostalAddress|textAutoCorrect"
                 android:paddingStart="@dimen/report_form_text_input_padding_start"
                 android:paddingEnd="@dimen/report_form_text_input_padding_start"
+                android:focusable="false"
+                android:clickable="false"
+                android:cursorVisible="false"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
