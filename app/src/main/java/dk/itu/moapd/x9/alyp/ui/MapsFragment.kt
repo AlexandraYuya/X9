@@ -234,15 +234,15 @@ class MapsFragment : Fragment() {
      * @param googleMap The map instance to add the marker to.
      */
     private fun addReportMarker(report: Report, googleMap: GoogleMap) {
-        val hue = when  {
-            report.upvoteCount >= 10 -> BitmapDescriptorFactory.HUE_RED
-            report.upvoteCount >= 3 -> BitmapDescriptorFactory.HUE_ORANGE
-            else -> BitmapDescriptorFactory.HUE_AZURE
-        }
+//        val hue = when  {
+//            report.upvoteCount >= 10 -> BitmapDescriptorFactory.HUE_RED
+//            report.upvoteCount >= 3 -> BitmapDescriptorFactory.HUE_ORANGE
+//            else -> BitmapDescriptorFactory.HUE_AZURE
+//        }
         googleMap.addMarker(MarkerOptions()
             .position(LatLng(report.latitude, report.longitude))
             .title(report.title)
-            .icon(BitmapDescriptorFactory.defaultMarker(hue))
+//            .icon(BitmapDescriptorFactory.defaultMarker(hue))
         )
     }
 

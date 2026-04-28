@@ -43,17 +43,4 @@ class ReportViewModel : ViewModel() {
             loadUserReports()
         }
     }
-
-    fun upvoteReport(reportUid: String, onResult: (Boolean, Int) -> Unit) {
-        viewModelScope.launch {
-            val (success, newCount) = reportRepository.upvoteReport(userId, reportUid)
-            onResult(success, newCount)
-        }
-    }
-
-    fun hasUserVoted(reportUid: String, onResult: (Boolean) -> Unit) {
-        viewModelScope.launch {
-            onResult(reportRepository.hasUserVoted(userId, reportUid))
-        }
-    }
 }

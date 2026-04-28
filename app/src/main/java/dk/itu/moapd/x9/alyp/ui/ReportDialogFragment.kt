@@ -55,25 +55,6 @@ class ReportDialogFragment : DialogFragment() {
         val report: Report = requireArguments().getSerializable(REPORT_DIALOG) as Report
         val view = FragmentReportDialogBinding.inflate(layoutInflater) // one off inflation of the view, don't need persistent binding since we don't need to manage fragment's lifecycle.
 
-        // Load upvote count and check if user already voted
-        reportViewModel.hasUserVoted(report.uid) { alreadyVoted ->
-            view.upvoteButton.isEnabled = !alreadyVoted
-            if (alreadyVoted) {
-                view.upvoteButton.text = getString(R.string.already_voted)
-            }
-            view.upvoteCount.text = getString(R.string.upvote_text, report.upvoteCount)
-        }
-
-        view.upvoteButton.setOnClickListener {
-            reportViewModel.upvoteReport(report.uid) { success, newCount ->
-                if (success) {
-                    view.upvoteCount.text = getString(R.string.upvote_text, newCount)
-                    view.upvoteButton.isEnabled = false
-                    view.upvoteButton.text = getString(R.string.already_voted)
-                }
-            }
-        }
-
         // uses Coil image library to load the image from Firebase Storage download URL.
         if (report.imageUrl.isNotEmpty()) {
             view.dialogImage.visibility = View.VISIBLE // hidden by default only not hidden if an image exists, not all reports have images.

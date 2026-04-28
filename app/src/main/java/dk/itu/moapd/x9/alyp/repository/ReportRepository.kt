@@ -69,9 +69,6 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
                     it.getValue(Report::class.java)
                 }
             }
-            .map { report ->
-                report.copy(upvoteCount = getUpvoteCount(report.uid))
-            }
     }
 
     /**
@@ -104,65 +101,5 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
             .child(reportUid)
             .removeValue()
             .await()
-    }
-
-    /**
-     * Fetches the current upvote count for a report.
-     *
-     * @param reportUid The uid to fetch the count for.
-     * @return The current upvote count or 0 if none exist.
-     */
-    suspend fun getUpvoteCount(reportUid: String): Int {
-        return database
-            .child(PATH_UPVOTES)
-            .child(reportUid)
-            .child(COUNT)
-            .get().await().getValue(Int::class.java) ?: 0
-    }
-
-    /**
-     * Checks whether a user has already upvoted a specific report.
-     * @param userId The Firebase uid of the user to check.
-     * @param reportUid The report uid to check.
-     * @return True if the user has already voted, false otherwise.
-     */
-    suspend fun hasUserVoted(userId: String?, reportUid: String): Boolean {
-        userId ?: return false
-        return database
-            .child(PATH_UPVOTES)
-            .child(reportUid)
-            .child(VOTERS)
-            .child(userId)
-            .get().await().exists()
-    }
-
-    /**
-     * Increments the upvote count for a report using a Firebase transaction to prevent race conditions, and records the voter to prevent duplicate votes.
-     * @param userId The Firebase uid of the voting user.
-     * @param reportUid The report uid to upvote.
-     * @return A pair where pair.first is true if the vote was committed successfully and pair.second is the updated upvote count.
-     */
-    suspend fun upvoteReport(userId: String?, reportUid: String): Pair<Boolean, Int> {
-        userId ?: return Pair(false, 0)
-
-        return suspendCoroutine { continuation ->
-            val countRef = database.child(PATH_UPVOTES).child(reportUid).child(COUNT)
-            val voterRef = database.child(PATH_UPVOTES).child(reportUid).child(VOTERS).child(userId)
-
-            countRef.runTransaction(object : Transaction.Handler {
-                override fun doTransaction(currentData: MutableData): Transaction.Result {
-                    currentData.value = (currentData.getValue(Int::class.java) ?: 0) + 1
-                    return Transaction.success(currentData)
-                }
-                override fun onComplete(error: DatabaseError?, committed: Boolean, snapshot: DataSnapshot?) {
-                    if (committed && error == null) {
-                        voterRef.setValue(true)
-                        continuation.resume(Pair(true, snapshot?.getValue(Int::class.java) ?: 0))
-                    } else {
-                        continuation.resume(Pair(false, 0))
-                    }
-                }
-            })
-        }
     }
 }
