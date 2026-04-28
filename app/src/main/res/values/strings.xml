@@ -1,7 +1,6 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">X9</string>
-    <string name="welcome_txt">Welcome to X9 Let’s Begin!</string>
     <!--  Report hints  -->
     <string name="report_title_hint">Report title</string>
     <string name="report_location_hint">Report Location</string>
@@ -16,7 +15,6 @@
     <string name="severity_major">Major</string>
     <!-- Buttons  -->
     <string name="submit_btn">Submit</string>
-    <string name="create_report_btn">Create a new report</string>
     <!--    -->
     <string name="view_reports">View Reports</string>
     <string name="report_title">Report Title</string>
@@ -52,6 +50,10 @@
     <string name="already_voted">Already voted</string>
     <string name="report_image_description">Report Image</string>
     <string name="report_image_button">Report Image button</string>
+    <string name="switch_camera">Switch camera</string>
+    <string name="capture">Capture</string>
+    <string name="confirm_report">Confirm report</string>
+    <string name="_0_confirmations">0 confirmations</string>
     <!-- Report severity array -->
     <string-array name="report_types_array">
         <item>Accident</item>

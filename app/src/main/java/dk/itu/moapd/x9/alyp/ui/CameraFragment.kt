@@ -95,7 +95,7 @@ class CameraFragment : Fragment() {
         ActivityResultContracts.RequestMultiplePermissions() // have multiple request entries
     ) { permissions ->
 
-        // loop through each permission entry, if theres no value then permission is set to false, or if anyof the permissions aren't granted
+        // loop through each permission entry, if theres no value then permission is set to false, or if any of the permissions aren't granted
         val permissionGranted = permissions.entries.all { entry ->
             entry.key !in REQUIRED_PERMISSIONS || entry.value
         }

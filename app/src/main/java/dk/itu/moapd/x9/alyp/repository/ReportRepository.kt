@@ -27,6 +27,8 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
         private const val PATH_REPORTS = "/reports"
         private const val PATH_UPVOTES = "/upvotes"
         private const val CHILD_CREATED_AT = "createdAt"
+        private const val COUNT = "count"
+        private const val VOTERS = "voters"
     }
 
     /**
@@ -114,7 +116,7 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
         return database
             .child(PATH_UPVOTES)
             .child(reportUid)
-            .child("count")
+            .child(COUNT)
             .get().await().getValue(Int::class.java) ?: 0
     }
 
@@ -129,7 +131,7 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
         return database
             .child(PATH_UPVOTES)
             .child(reportUid)
-            .child("voters")
+            .child(VOTERS)
             .child(userId)
             .get().await().exists()
     }
@@ -144,8 +146,8 @@ class ReportRepository(private val database: DatabaseReference = Firebase.databa
         userId ?: return Pair(false, 0)
 
         return suspendCoroutine { continuation ->
-            val countRef = database.child(PATH_UPVOTES).child(reportUid).child("count")
-            val voterRef = database.child(PATH_UPVOTES).child(reportUid).child("voters").child(userId)
+            val countRef = database.child(PATH_UPVOTES).child(reportUid).child(COUNT)
+            val voterRef = database.child(PATH_UPVOTES).child(reportUid).child(VOTERS).child(userId)
 
             countRef.runTransaction(object : Transaction.Handler {
                 override fun doTransaction(currentData: MutableData): Transaction.Result {

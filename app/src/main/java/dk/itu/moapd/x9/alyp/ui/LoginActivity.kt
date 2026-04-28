@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Handles results from sign-in attempt, on success retriece the current user, display a success text and navigate to MainActivity.
+     * Handles results from sign-in attempt, on success retrieve the current user, display a success text and navigate to MainActivity.
      * On failed sign-in attempt, navigate back to sign-in screen.
      */
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {

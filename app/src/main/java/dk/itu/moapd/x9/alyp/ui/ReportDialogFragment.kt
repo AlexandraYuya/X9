@@ -93,7 +93,7 @@ class ReportDialogFragment : DialogFragment() {
             AlertDialog.Builder(requireContext())
             .setTitle(report.title)
             .setView(view.root)
-            .setPositiveButton("OK", null)
+            .setPositiveButton(R.string.dialog_OK_btn, null)
             .create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

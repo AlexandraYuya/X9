@@ -79,7 +79,7 @@ class ReportFormFragment : Fragment() {
         binding.reportDateTimeInput.setText(dateFormatter.format(Date()))
 
         // camera click event listener to launch camera app
-        binding.reportCamera.setOnClickListener { view: View ->
+        binding.reportCamera.setOnClickListener {
             // launch camera fragment if has permission
             findNavController().navigate(R.id.action_reportFormFragment_to_reportCameraFragment)
         }
@@ -91,13 +91,13 @@ class ReportFormFragment : Fragment() {
         }
 
 
-        binding.submitBtn.setOnClickListener { view: View ->
+        binding.submitBtn.setOnClickListener {
             if (auth.currentUser != null) {
                 viewLifecycleOwner.lifecycleScope.launch {
                     submitReport()
                 }
             }else {
-                Toast.makeText(context, "Log-in to submit a report", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Sign-in to submit a report", Toast.LENGTH_SHORT).show()
             }
         }
     }

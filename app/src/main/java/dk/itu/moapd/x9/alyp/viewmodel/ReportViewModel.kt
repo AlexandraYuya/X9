@@ -14,6 +14,7 @@ class ReportViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val userId = auth.currentUser?.uid
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
+
     val reports: StateFlow<List<Report>> = _reports
 
     /**

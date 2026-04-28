@@ -8,8 +8,8 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="@dimen/content_main_width"
-        android:layout_height="@dimen/content_main_height"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="@dimen/content_height"
         app:defaultNavHost="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

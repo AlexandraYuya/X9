@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="content_main_height">0dp</dimen>
-    <dimen name="content_main_width">0dp</dimen>
+    <dimen name="content_height">0dp</dimen>
+    <dimen name="content_width">0dp</dimen>
 
     <dimen name="report_form_text_input_width">0dp</dimen>
     <dimen name="report_form_text_input_height">98dp</dimen>
@@ -24,4 +24,13 @@
     <dimen name="report_list_text_size">25sp</dimen>
     <dimen name="report_list_height">0dp</dimen>
 
+    <dimen name="imageview_layout">80dp</dimen>
+    <dimen name="btn_margin_bottom">56dp</dimen>
+    <dimen name="icon">80dp</dimen>
+
+    <dimen name="padding">16dp</dimen>
+    <dimen name="image_height">300dp</dimen>
+    <dimen name="margin">12dp</dimen>
+    <dimen name="textview_margin">16dp</dimen>
+    <dimen name="textview_size">25sp</dimen>
 </resources>

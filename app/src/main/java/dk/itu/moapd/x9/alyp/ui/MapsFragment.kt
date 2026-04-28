@@ -198,7 +198,7 @@ class MapsFragment : Fragment() {
         super.onStart()
         Log.d(TAG, "onStart() called")
 
-        // create connection to LocationService to start recieiving location updates
+        // create connection to LocationService to start receiving location updates
         val serviceIntent = Intent(requireContext(), LocationService::class.java)
         requireActivity().bindService(
             serviceIntent,

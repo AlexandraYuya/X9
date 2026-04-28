@@ -1,6 +1,5 @@
 package dk.itu.moapd.x9.alyp.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -91,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                signOut(this)
+                signOut()
                 invalidateOptionsMenu()
                 true
             }
@@ -124,8 +123,8 @@ class MainActivity : AppCompatActivity() {
     /**
      * Intentional design decision, when signing out, we don't close our activity, instead we disable the profile access and report publishing.
      */
-    private fun signOut(context: Context) {
+    private fun signOut() {
         auth.signOut()
-        Toast.makeText(context, "signed out, user reports are no longer visible", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "signed out, user reports are no longer visible", Toast.LENGTH_LONG).show()
     }
 }

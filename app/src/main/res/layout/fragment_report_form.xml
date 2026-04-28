@@ -23,7 +23,6 @@
             android:textAlignment="center"
             android:textSize="@dimen/report_list_text_size"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,15 +42,15 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="@dimen/report_form_text_input_margin_end"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 >
 
                 <ImageView
                     android:id="@+id/report_photo"
-                    android:layout_height="80dp"
-                    android:layout_width="80dp"
+                    android:layout_height="@dimen/imageview_layout"
+                    android:layout_width="@dimen/imageview_layout"
                     android:contentDescription="@string/report_image_description"
                     android:scaleType="centerInside"
                     android:cropToPadding="true"
@@ -63,7 +62,7 @@
 
                 <ImageButton
                     android:id="@+id/report_camera"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/imageview_layout"
                     android:layout_height="wrap_content"
                     android:src="@drawable/camera"
                     android:contentDescription="@string/report_image_button"
@@ -75,7 +74,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/report_title_layout"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/report_form_text_input_width"
                 android:layout_height="wrap_content"
                 app:boxBackgroundMode="filled"
                 app:endIconMode="clear_text"
@@ -93,7 +92,9 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/report_title_hint"
                     android:inputType="textCapSentences|textAutoCorrect"
-                    android:paddingStart="@dimen/report_form_text_input_padding_start" />
+                    android:paddingStart="@dimen/report_form_text_input_padding_start"
+                    android:paddingEnd="@dimen/report_form_text_input_padding_start"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,12 +118,14 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/report_location_hint"
                 android:inputType="textCapSentences|textPostalAddress|textAutoCorrect"
-                android:paddingStart="@dimen/report_form_text_input_padding_start" />
+                android:paddingStart="@dimen/report_form_text_input_padding_start"
+                android:paddingEnd="@dimen/report_form_text_input_padding_start"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_date_layout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/report_form_text_input_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/report_form_text_input_margin_start"
             android:layout_marginTop="@dimen/report_form_text_input_margin_top"
@@ -141,13 +144,14 @@
                 android:hint="@string/report_date_hint"
                 android:inputType="datetime"
                 android:paddingStart="@dimen/report_form_text_input_padding_start"
+                android:paddingEnd="@dimen/report_form_text_input_padding_start"
                 tools:text="@string/report_date_default_input" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/report_type_layout"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/report_form_text_input_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/report_form_text_input_margin_start"
             android:layout_marginTop="@dimen/report_form_text_input_margin_top"
@@ -164,7 +168,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textAutoCorrect"
-                android:paddingStart="@dimen/report_form_text_input_padding_start" />
+                android:paddingStart="@dimen/report_form_text_input_padding_start"
+                android:paddingEnd="@dimen/report_form_text_input_padding_start"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -187,7 +193,9 @@
                 android:layout_height="@dimen/report_form_text_input_height"
                 android:hint="@string/report_description_hint"
                 android:inputType="textMultiLine|textAutoCorrect"
-                android:paddingStart="@dimen/report_form_text_input_padding_start" />
+                android:paddingStart="@dimen/report_form_text_input_padding_start"
+                android:paddingEnd="@dimen/report_form_text_input_padding_start"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
