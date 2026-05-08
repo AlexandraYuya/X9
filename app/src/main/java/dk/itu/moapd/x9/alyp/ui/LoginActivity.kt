@@ -45,13 +45,13 @@ class LoginActivity : AppCompatActivity() {
     private fun createSignInIntent() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build(),
         )
 
         val signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setCredentialManagerEnabled(false)
             .setTheme(R.style.AppTheme)
             .build()
         signInLauncher.launch(signInIntent)
@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
      * On failed sign-in attempt, navigate back to sign-in screen.
      */
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        if (result.resultCode == RESULT_OK) {
+        if (result.resultCode == RESULT_OK && FirebaseAuth.getInstance().currentUser !== null) {
             val user = FirebaseAuth.getInstance().currentUser
             Toast.makeText(this, "${user?.email} successfully logged in", Toast.LENGTH_SHORT).show()
             startMainActivity()

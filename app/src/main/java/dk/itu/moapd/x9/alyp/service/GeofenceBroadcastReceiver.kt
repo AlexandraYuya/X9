@@ -25,7 +25,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     private val databaseRef = Firebase.database(DATABASE_URL).reference
 
     override fun onReceive(context: Context, intent: Intent) {
-        // Retrievs information on which report event was triggered via the intent.
+        // Retrieves information on which report event was triggered via the intent.
         val geofencingEvent = GeofencingEvent.fromIntent(intent) ?: return
 
         if (geofencingEvent.hasError()) {
@@ -41,8 +41,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             // get the report which triggered the geofence
             val newReportUid = intent.getStringExtra(EXTRA_NEW_REPORT_UID) ?: return
 
-            Log.d(TAG, "Geofence entered — confirming ${triggeringGeofences?.size} overlapping report(s)")
-
             // for each triggered geofence, add it to database's confirmation entry
             triggeringGeofences?.forEach { geofence ->
                 databaseRef
@@ -55,6 +53,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 .child(PATH_CONFIRMATIONS)
                 .child(newReportUid)
                 .setValue(true)
+
         }else {
             Log.e(TAG, "invalid geofencing type $geofenceTransition")
         }
